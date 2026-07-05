@@ -720,10 +720,7 @@
   }
   @keyframes modalIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
   .modal.wide { max-width: 820px; padding: 0; overflow: hidden; }
-  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; margin-bottom: 1.6rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gris-clair); }
-  .modal-steps { display: flex; gap: 1.8rem; margin-bottom: 1.8rem; flex-wrap: wrap; }
-  .modal-step { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gris); padding-bottom: 0.5rem; border-bottom: 2px solid transparent; }
-  .modal-step.active { color: var(--or); border-bottom-color: var(--or); }
+  .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; margin-bottom: 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gris-clair); }
   .form-group { margin-bottom: 1.1rem; }
   .form-group label { display: block; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gris); margin-bottom: 0.4rem; }
   .form-group input, .form-group select {
@@ -733,18 +730,26 @@
   }
   .form-group input:focus, .form-group select:focus { border-color: var(--or); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 1.4rem; }
-  .payment-opt { border: 1px solid var(--gris-clair); background: white; padding: 0.9rem; text-align: center; cursor: pointer; transition: all 0.2s; }
-  .payment-opt:hover, .payment-opt.selected { border-color: var(--or); background: rgba(184,151,90,0.07); }
-  .payment-opt-icon { font-size: 1.3rem; margin-bottom: 0.3rem; }
-  .payment-opt-label { font-size: 0.65rem; letter-spacing: 0.07em; color: var(--gris); }
-  .modal-nav { display: flex; justify-content: space-between; margin-top: 1.5rem; gap: 1rem; }
-  .btn-back {
-    padding: 0.8rem 1.4rem; background: none; border: 1px solid var(--gris-clair);
-    cursor: pointer; font-size: 0.66rem; letter-spacing: 0.12em; text-transform: uppercase;
-    font-family: 'Inter', sans-serif; color: var(--gris); transition: all 0.2s;
+
+  .checkout-summary {
+    background: #f2efe9; padding: 1.1rem 1.2rem; margin-bottom: 1.6rem;
   }
-  .btn-back:hover { border-color: var(--noir); color: var(--noir); }
+  .checkout-item-row {
+    display: flex; justify-content: space-between; gap: 1rem;
+    font-size: 0.78rem; color: var(--texte); padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(10,10,10,0.06);
+  }
+  .checkout-item-row:last-of-type { border-bottom: none; }
+  .checkout-summary-total {
+    display: flex; justify-content: space-between; margin-top: 0.7rem; padding-top: 0.7rem;
+    border-top: 1px solid rgba(10,10,10,0.12);
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500;
+  }
+  .wa-submit { display: flex; align-items: center; justify-content: center; }
+  .checkout-note {
+    font-size: 0.7rem; color: var(--gris); line-height: 1.7;
+    margin-top: 0.9rem; text-align: center;
+  }
   .modal-close {
     position: absolute; top: 1.3rem; right: 1.3rem; z-index: 5;
     background: none; border: none; cursor: pointer; font-size: 1.25rem;
@@ -782,6 +787,12 @@
   }
   .size-chip:hover { border-color: var(--or); color: var(--or); }
   .size-chip.selected { background: var(--noir); color: var(--creme); border-color: var(--noir); }
+  .qv-color-input {
+    width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--gris-clair);
+    background: white; font-size: 0.85rem; font-family: 'Inter', sans-serif;
+    color: var(--texte); outline: none; margin-bottom: 1.4rem; transition: border-color 0.2s;
+  }
+  .qv-color-input:focus { border-color: var(--or); }
   .qv-qty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
   .qv-note { font-size: 0.68rem; color: var(--gris); line-height: 1.7; margin-top: auto; padding-top: 1.2rem; border-top: 1px solid var(--gris-clair); }
   .qv-note b { color: var(--or); font-weight: 500; }
@@ -918,7 +929,6 @@
     .btn-cart { font-size: 0.58rem; padding: 0.58rem 0.3rem; letter-spacing: 0.08em; }
     .hero-btns { flex-direction: column; align-items: flex-start; }
     .form-row { grid-template-columns: 1fr; }
-    .payment-options { grid-template-columns: 1fr 1fr; }
     .hero-counter { display: none; }
   }
 
@@ -1483,14 +1493,14 @@ function filterCat(genre, cat) {
 // ══════════════════════════════════════════
 // VUE RAPIDE
 // ══════════════════════════════════════════
-let qvSize = null, qvQty = 1, qvId = null;
+let qvSize = null, qvQty = 1, qvId = null, qvColor = '';
 
 function findProduit(id) { return [...produits.homme, ...produits.femme].find(p => p.id===id); }
 
 function openQuick(id) {
   const p = findProduit(id);
   if (!p) return;
-  qvId = id; qvSize = null; qvQty = 1;
+  qvId = id; qvSize = null; qvQty = 1; qvColor = '';
   renderQuick(p);
   document.getElementById('qv-modal').classList.add('open');
 }
@@ -1512,6 +1522,8 @@ function renderQuick(p) {
         <div class="qv-sizes">
           ${TAILLES.map(t => `<button class="size-chip ${qvSize===t?'selected':''}" onclick="qvSelectSize(${t})">${t}</button>`).join('')}
         </div>
+        <div class="qv-label">Couleur souhaitée <span style="opacity:.6">(optionnel, si plusieurs disponibles)</span></div>
+        <input class="qv-color-input" id="qv-color-input" type="text" placeholder="Ex : noir, kaki, sable…" value="${qvColor.replace(/"/g,'&quot;')}" oninput="qvColor=this.value">
         <div class="qv-label">Quantité</div>
         <div class="qv-qty-row">
           <div class="qty-stepper">
@@ -1528,7 +1540,7 @@ function renderQuick(p) {
 function qvSelectSize(t) { qvSize = (qvSize===t ? null : t); renderQuick(findProduit(qvId)); }
 function qvSetQty(d) { qvQty = Math.max(1, Math.min(9, qvQty + d)); renderQuick(findProduit(qvId)); }
 function qvAddToCart() {
-  addToCart(qvId, qvSize, null, qvQty);
+  addToCart(qvId, qvSize, null, qvQty, qvColor.trim());
   closeQuick();
 }
 
@@ -1537,13 +1549,14 @@ function qvAddToCart() {
 // ══════════════════════════════════════════
 let panier = [];
 
-function addToCart(id, taille, btn, qty) {
+function addToCart(id, taille, btn, qty, couleur) {
   const p = findProduit(id);
   if (!p) return;
   qty = qty || 1;
-  const key = id + '|' + (taille || '');
+  couleur = (couleur || '').trim();
+  const key = id + '|' + (taille || '') + '|' + couleur.toLowerCase();
   const ex = panier.find(i => i.key===key);
-  if (ex) ex.qty += qty; else panier.push({ key, id, taille, qty });
+  if (ex) ex.qty += qty; else panier.push({ key, id, taille, couleur, qty });
   updateCartBadge(true);
   showToast(`${p.nom}${taille ? ' · P.'+taille : ''} ajouté ✓`);
   if (btn) {
@@ -1604,7 +1617,7 @@ function renderCart() {
       </div>
       <div class="cart-item-info">
         <div class="cart-item-name">${p.nom}</div>
-        <div class="cart-item-detail">${p.sous}${item.taille ? ' · Pointure ' + item.taille : ''}</div>
+        <div class="cart-item-detail">${p.sous}${item.taille ? ' · Pointure ' + item.taille : ''}${item.couleur ? ' · ' + item.couleur : ''}</div>
         <button class="cart-item-remove" onclick="removeFromCart('${item.key}')">Retirer</button>
         <div class="cart-item-bottom">
           <div class="qty-stepper">
@@ -1622,108 +1635,89 @@ function renderCart() {
 }
 
 // ══════════════════════════════════════════
-// CHECKOUT
+// CHECKOUT → COMMANDE DIRECTE SUR WHATSAPP
 // ══════════════════════════════════════════
-let checkoutStep = 1;
-let selectedPayment = 'momo';
+const BOUTIQUE_WHATSAPP = '2290196685554';
 
 function openCheckout() {
-  closeCart(); checkoutStep = 1;
+  closeCart();
   document.getElementById('checkout-modal').classList.add('open');
   renderCheckout();
 }
 function closeCheckout() { document.getElementById('checkout-modal').classList.remove('open'); }
 
 function renderCheckout() {
-  const total = cartTotal();
   const c = document.getElementById('checkout-content');
-  if (checkoutStep===1) {
-    c.innerHTML = `
-      <h2 class="modal-title">Finaliser la commande</h2>
-      <div class="modal-steps">
-        <div class="modal-step active">① Livraison</div>
-        <div class="modal-step">② Paiement</div>
-        <div class="modal-step">③ Confirmation</div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Prénom</label><input placeholder="Jean" id="f-prenom"></div>
-        <div class="form-group"><label>Nom</label><input placeholder="Dupont" id="f-nom"></div>
-      </div>
-      <div class="form-group"><label>Adresse</label><input placeholder="Quartier, Rue…" id="f-adresse"></div>
-      <div class="form-row">
-        <div class="form-group"><label>Ville</label><input placeholder="Cotonou" id="f-ville"></div>
-        <div class="form-group"><label>Pays</label>
-          <select id="f-pays"><option>Bénin</option><option>Côte d'Ivoire</option><option>Sénégal</option><option>Togo</option><option>Niger</option><option>France</option><option>Autre</option></select>
-        </div>
-      </div>
-      <div class="form-group"><label>Téléphone WhatsApp</label><input placeholder="+229 0196685554" id="f-tel"></div>
-      <div class="modal-nav">
-        <span></span>
-        <button class="btn-primary" onclick="checkoutStep=2;renderCheckout()">Paiement →</button>
-      </div>`;
-  } else if (checkoutStep===2) {
-    c.innerHTML = `
-      <h2 class="modal-title">Mode de paiement</h2>
-      <div class="modal-steps">
-        <div class="modal-step">① Livraison</div>
-        <div class="modal-step active">② Paiement</div>
-        <div class="modal-step">③ Confirmation</div>
-      </div>
-      <div class="payment-options">
-        <div class="payment-opt ${selectedPayment==='momo'?'selected':''}" onclick="selectedPayment='momo';renderCheckout()">
-          <div class="payment-opt-icon">📱</div><div class="payment-opt-label">Mobile Money</div>
-        </div>
-        <div class="payment-opt ${selectedPayment==='card'?'selected':''}" onclick="selectedPayment='card';renderCheckout()">
-          <div class="payment-opt-icon">💳</div><div class="payment-opt-label">Carte bancaire</div>
-        </div>
-        <div class="payment-opt ${selectedPayment==='paypal'?'selected':''}" onclick="selectedPayment='paypal';renderCheckout()">
-          <div class="payment-opt-icon">🅿️</div><div class="payment-opt-label">PayPal</div>
-        </div>
-        <div class="payment-opt ${selectedPayment==='cash'?'selected':''}" onclick="selectedPayment='cash';renderCheckout()">
-          <div class="payment-opt-icon">💵</div><div class="payment-opt-label">Paiement à la livraison</div>
-        </div>
-      </div>
-      ${selectedPayment==='momo' ? `
-        <div class="form-group"><label>Opérateur</label>
-          <select><option>MTN Mobile Money</option><option>Moov Money</option><option>Orange Money</option><option>Wave</option></select>
-        </div>
-        <div class="form-group"><label>Numéro</label><input placeholder="+229 0196685554"></div>` :
-       selectedPayment==='card' ? `
-        <div class="form-group"><label>Numéro de carte</label><input placeholder="4242 4242 4242 4242"></div>
-        <div class="form-row">
-          <div class="form-group"><label>Expiration</label><input placeholder="MM/AA"></div>
-          <div class="form-group"><label>CVV</label><input placeholder="123"></div>
-        </div>` :
-       selectedPayment==='paypal' ? `
-        <div class="form-group"><label>Email PayPal</label><input placeholder="vous@email.com"></div>` :
-        `<p style="font-size:0.82rem;color:var(--gris);line-height:1.75;padding:1rem 0">Vous paierez en espèces à la réception. Notre livreur vous contactera 24h avant.</p>`}
-      <div style="background:#f2efe9;padding:1rem;margin-top:1rem;font-size:0.83rem;display:flex;justify-content:space-between;align-items:center;">
-        <span style="color:var(--gris)">Total à payer</span>
-        <strong style="font-size:1.1rem">${formatPrix(total)}</strong>
-      </div>
-      <div class="modal-nav">
-        <button class="btn-back" onclick="checkoutStep=1;renderCheckout()">← Retour</button>
-        <button class="btn-primary" onclick="confirmOrder()">Confirmer ✓</button>
-      </div>`;
-  } else {
-    const orderId = 'LSA-' + Math.floor(Math.random()*90000+10000);
-    c.innerHTML = `
-      <div class="order-success">
-        <div class="success-icon">✅</div>
-        <h2 class="success-title">Commande confirmée !</h2>
-        <div class="order-id">${orderId}</div>
-        <p class="success-sub">
-          Merci pour votre confiance 🙏<br><br>
-          Notre équipe prépare votre commande avec soin.<br>
-          Vous recevrez une confirmation par <strong>WhatsApp</strong> (+229 0196685554) dans les prochaines minutes.
-        </p>
-        <br>
-        <button class="btn-primary" onclick="panier=[];updateCartBadge();closeCheckout()">Retour à la boutique</button>
-      </div>`;
-    panier = []; updateCartBadge();
-  }
+  const itemsHtml = panier.map(item => {
+    const p = findProduit(item.id);
+    const details = [];
+    if (item.taille) details.push('Pointure ' + item.taille);
+    if (item.couleur) details.push(item.couleur);
+    return `<div class="checkout-item-row">
+      <span>${p.nom}${details.length ? ' · ' + details.join(', ') : ''} × ${item.qty}</span>
+      <span>${formatPrix(p.prix * item.qty)}</span>
+    </div>`;
+  }).join('');
+
+  c.innerHTML = `
+    <h2 class="modal-title">Vos coordonnées</h2>
+    <div class="checkout-summary">
+      ${itemsHtml}
+      <div class="checkout-summary-total"><span>Total</span><span>${formatPrix(cartTotal())}</span></div>
+    </div>
+    <form id="order-form" onsubmit="submitOrderForm(event)">
+      <div class="form-group"><label>Nom complet</label><input required placeholder="Jean Dupont" id="f-nom"></div>
+      <div class="form-group"><label>Ville</label><input required placeholder="Cotonou" id="f-ville"></div>
+      <div class="form-group"><label>Téléphone / WhatsApp</label><input required type="tel" placeholder="+229 0196685554" id="f-tel"></div>
+      <button type="submit" class="btn-primary wa-submit" style="width:100%">
+        <span style="margin-right:0.6rem">📱</span> Commander sur WhatsApp →
+      </button>
+      <p class="checkout-note">Vous serez redirigé·e vers WhatsApp, votre commande déjà rédigée dans la discussion — il ne restera qu'à appuyer sur Envoyer.</p>
+    </form>`;
 }
-function confirmOrder() { checkoutStep=3; renderCheckout(); }
+
+function buildOrderMessage(nom, ville, tel) {
+  const lignes = panier.map(item => {
+    const p = findProduit(item.id);
+    const details = [];
+    if (item.taille) details.push('Pointure ' + item.taille);
+    if (item.couleur) details.push('Couleur ' + item.couleur);
+    const suffixe = details.length ? ' (' + details.join(', ') + ')' : '';
+    return `• ${p.nom}${suffixe} — Qté ${item.qty} — ${formatPrix(p.prix * item.qty)}`;
+  }).join('\n');
+
+  return `Bonjour LSA 👋 Je souhaite passer la commande suivante :\n\n${lignes}\n\nTotal : ${formatPrix(cartTotal())}\n\nMes coordonnées :\nNom : ${nom}\nVille : ${ville}\nTéléphone : ${tel}\n\nMerci de me confirmer la disponibilité 🙏`;
+}
+
+function submitOrderForm(e) {
+  e.preventDefault();
+  const nom  = document.getElementById('f-nom').value.trim();
+  const ville = document.getElementById('f-ville').value.trim();
+  const tel  = document.getElementById('f-tel').value.trim();
+  if (!nom || !ville || !tel) return;
+
+  const message = buildOrderMessage(nom, ville, tel);
+  const url = `https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(url, '_blank', 'noopener');
+  showOrderSuccess(url);
+}
+
+function showOrderSuccess(waUrl) {
+  const c = document.getElementById('checkout-content');
+  c.innerHTML = `
+    <div class="order-success">
+      <div class="success-icon">📲</div>
+      <h2 class="success-title">C'est presque fini !</h2>
+      <p class="success-sub">
+        WhatsApp s'est ouvert dans un nouvel onglet avec votre commande déjà rédigée.<br><br>
+        Il ne vous reste plus qu'à appuyer sur <strong>Envoyer</strong> pour la transmettre à notre équipe.
+      </p>
+      <p style="margin-top:1rem"><a href="${waUrl}" target="_blank" rel="noopener" style="color:var(--or);font-size:0.78rem;letter-spacing:0.05em">L'onglet ne s'est pas ouvert ? Cliquez ici →</a></p>
+      <br>
+      <button class="btn-primary" onclick="panier=[];updateCartBadge();closeCheckout()">Retour à la boutique</button>
+    </div>`;
+  panier = []; updateCartBadge();
+}
 
 // ══════════════════════════════════════════
 // TOAST + NEWSLETTER
@@ -1754,7 +1748,7 @@ function chelseaReply(msg) {
   if (has('taille','pointure','size'))                     return "Nos modèles taillent normalement, du 37 au 45 selon les pièces 📏. Dites-moi votre pointure et le modèle souhaité, je confirme la disponibilité.";
   if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre numéro de commande (format LSA-XXXXX) et je vous donne l'état de votre colis en temps réel.";
   if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
-    return "Vous pouvez régler par Mobile Money (MTN, Moov, Orange, Wave), carte bancaire, PayPal, ou en espèces à la livraison 💳. Tout est sécurisé.";
+    return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
   if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales vont de 11 000 à 24 000 FCFA. Les ensembles (chaussures + pochette) sont entre 17 500 et 24 000 FCFA 😊";
   if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, en cuir véritable soigneusement sélectionné 🧵. C'est tout l'esprit Luxury Artisanal.";
   if (has('pochette','sac','clutch'))                      return "Nos pochettes cuir avec dragonne accompagnent parfaitement nos sandales 👝. Retrouvez-les dans l'onglet « Pochettes » du catalogue.";
