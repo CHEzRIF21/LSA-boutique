@@ -645,45 +645,34 @@
   }
 
   /* ═══════════════════════════════════════
-     PANIER
+     TUNNEL DE COMMANDE — indicateur d'étapes
   ═══════════════════════════════════════ */
-  .cart-overlay {
-    display: none; position: fixed; inset: 0; z-index: 200;
-    background: rgba(10,10,10,0.55); backdrop-filter: blur(3px);
+  .wizard-head { margin-bottom: 1.5rem; }
+  .wizard-back {
+    display: inline-block; background: none; border: none; cursor: pointer;
+    font-size: 0.68rem; letter-spacing: 0.03em; color: var(--gris);
+    text-decoration: underline; padding: 0; margin-bottom: 1rem;
+    font-family: 'Inter', sans-serif; transition: color 0.2s;
   }
-  .cart-overlay.open { display: block; }
-  .cart-panel {
-    position: fixed; top: 0; right: -520px; bottom: 0;
-    width: 470px; background: var(--creme);
-    padding: 2rem; z-index: 201;
-    display: flex; flex-direction: column;
-    transition: right 0.4s var(--ease);
-    overflow-y: auto;
+  .wizard-back:hover { color: var(--noir); }
+  .wizard-progress { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.7rem; }
+  .wizard-dot {
+    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0;
+    border: 1px solid var(--gris-clair); background: white; color: var(--gris);
+    font-size: 0.68rem; font-weight: 500; font-family: 'Inter', sans-serif;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.25s;
   }
-  .cart-panel.open { right: 0; }
-  .cart-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 1.8rem; padding-bottom: 1rem;
-    border-bottom: 1px solid var(--gris-clair);
-  }
-  .cart-title { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 300; }
-  .cart-close {
-    background: none; border: none; cursor: pointer; font-size: 1.25rem;
-    color: var(--gris); transition: color 0.2s, transform 0.25s; line-height: 1;
-  }
-  .cart-close:hover { color: var(--noir); transform: rotate(90deg); }
-  .cart-items { flex: 1; }
-  .cart-item { display: flex; gap: 1rem; padding: 1.1rem 0; border-bottom: 1px solid var(--gris-clair); }
-  .cart-item-img {
-    width: 74px; height: 92px; background: var(--gris-clair);
-    flex-shrink: 0; overflow: hidden;
-  }
-  .cart-item-img img { width: 100%; height: 100%; object-fit: cover; }
-  .cart-item-info { flex: 1; display: flex; flex-direction: column; }
-  .cart-item-name { font-family: 'Cormorant Garamond', serif; font-size: 1.02rem; font-weight: 500; }
-  .cart-item-detail { font-size: 0.68rem; color: var(--gris); margin-top: 0.25rem; }
-  .cart-item-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 0.6rem; }
-  .cart-item-price { font-size: 0.9rem; font-weight: 600; color: var(--or); }
+  .wizard-dot.active { border-color: var(--or); background: var(--or); color: white; }
+  .wizard-dot.done { border-color: var(--or); background: white; color: var(--or); }
+  .wizard-bar { flex: 1; height: 2px; background: var(--gris-clair); position: relative; overflow: hidden; }
+  .wizard-bar-fill { position: absolute; inset: 0; background: var(--or); transform: scaleX(0); transform-origin: left; transition: transform 0.4s var(--ease); }
+  .wizard-bar.done .wizard-bar-fill { transform: scaleX(1); }
+  .wizard-label { font-size: 0.64rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--or); font-weight: 500; }
+
+  /* ═══════════════════════════════════════
+     RÉCAPITULATIF DE COMMANDE (étape coordonnées)
+  ═══════════════════════════════════════ */
   .qty-stepper { display: inline-flex; align-items: center; border: 1px solid var(--gris-clair); background: white; }
   .qty-stepper button {
     width: 26px; height: 26px; background: none; border: none; cursor: pointer;
@@ -691,18 +680,31 @@
   }
   .qty-stepper button:hover { color: var(--or); }
   .qty-stepper span { min-width: 26px; text-align: center; font-size: 0.78rem; font-weight: 500; }
-  .cart-item-remove {
+
+  .order-summary { background: #f2efe9; padding: 0.3rem 1.1rem; margin-bottom: 1.5rem; }
+  .order-line { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.9rem; padding: 0.85rem 0; border-bottom: 1px solid rgba(10,10,10,0.08); }
+  .order-line:last-of-type { border-bottom: none; }
+  .order-line-info { flex: 1; min-width: 0; }
+  .order-line-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 500; }
+  .order-line-detail { font-size: 0.68rem; color: var(--gris); margin-top: 0.2rem; }
+  .order-line-remove {
     background: none; border: none; cursor: pointer;
-    font-size: 0.66rem; color: var(--gris); text-decoration: underline;
-    margin-top: 0.35rem; font-family: 'Inter', sans-serif; padding: 0;
-    align-self: flex-start;
+    font-size: 0.64rem; color: var(--gris); text-decoration: underline;
+    margin-top: 0.35rem; padding: 0; font-family: 'Inter', sans-serif;
   }
-  .cart-item-remove:hover { color: #7a2020; }
-  .cart-footer { padding-top: 1.4rem; border-top: 1px solid var(--gris-clair); margin-top: 0.8rem; }
-  .cart-total-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 0.45rem; color: var(--gris); }
-  .cart-total-grand { display: flex; justify-content: space-between; font-family: 'Cormorant Garamond', serif; font-size: 1.45rem; margin: 0.9rem 0; }
-  .cart-empty { text-align: center; padding: 3rem 0; color: var(--gris); }
-  .cart-empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.25; }
+  .order-line-remove:hover { color: #7a2020; }
+  .order-line-right { display: flex; flex-direction: column; align-items: flex-end; gap: 0.5rem; flex-shrink: 0; }
+  .order-line-price { font-size: 0.85rem; font-weight: 600; color: var(--or); white-space: nowrap; }
+  .order-summary-total {
+    display: flex; justify-content: space-between; padding: 0.9rem 0 0.6rem;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 500;
+  }
+  .order-add-more {
+    display: block; width: 100%; text-align: center; background: none; border: none; cursor: pointer;
+    font-size: 0.67rem; letter-spacing: 0.05em; color: var(--gris); text-decoration: underline;
+    padding: 0.3rem; font-family: 'Inter', sans-serif; transition: color 0.2s;
+  }
+  .order-add-more:hover { color: var(--or); }
 
   /* ═══════════════════════════════════════
      MODALES (checkout + vue rapide)
@@ -732,20 +734,6 @@
   .form-group input:focus, .form-group select:focus { border-color: var(--or); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-  .checkout-summary {
-    background: #f2efe9; padding: 1.1rem 1.2rem; margin-bottom: 1.6rem;
-  }
-  .checkout-item-row {
-    display: flex; justify-content: space-between; gap: 1rem;
-    font-size: 0.78rem; color: var(--texte); padding: 0.4rem 0;
-    border-bottom: 1px solid rgba(10,10,10,0.06);
-  }
-  .checkout-item-row:last-of-type { border-bottom: none; }
-  .checkout-summary-total {
-    display: flex; justify-content: space-between; margin-top: 0.7rem; padding-top: 0.7rem;
-    border-top: 1px solid rgba(10,10,10,0.12);
-    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 500;
-  }
   .wa-submit { display: flex; align-items: center; justify-content: center; }
   .checkout-note {
     font-size: 0.7rem; color: var(--gris); line-height: 1.7;
@@ -917,7 +905,6 @@
     .wa-cta { padding: 3.5rem 1.4rem; }
     .catalogue-section { padding: 2.6rem 1.2rem 3.2rem; }
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
-    .cart-panel { width: 100%; right: -100%; }
     .chat-window { width: calc(100vw - 2.4rem); right: 1.2rem; }
     .footer-inner { grid-template-columns: 1fr; gap: 2.2rem; }
     footer { padding: 3.5rem 1.5rem 2rem; }
@@ -960,7 +947,7 @@
     </div>
     <div class="nav-actions">
       <button onclick="openChat()" title="Service client" aria-label="Chat conseillère">💬</button>
-      <button onclick="openCart()" title="Mon panier" aria-label="Panier">
+      <button onclick="openOrderPanel()" title="Ma commande" aria-label="Ma commande">
         🛍️<span class="cart-count" id="cart-badge">0</span>
       </button>
       <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu" aria-expanded="false">
@@ -1144,31 +1131,7 @@
   <div class="footer-bottom">© 2026 LSA — Luxury Artisanal · Cotonou, Bénin · Tous droits réservés.</div>
 </footer>
 
-<!-- ═══════════════ PANIER ═══════════════ -->
-<div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
-<div class="cart-panel" id="cart-panel" role="dialog" aria-modal="true" aria-label="Mon panier">
-  <div class="cart-header">
-    <h2 class="cart-title">Mon panier</h2>
-    <button class="cart-close" onclick="closeCart()" aria-label="Fermer">✕</button>
-  </div>
-  <div class="cart-items" id="cart-items-list"></div>
-  <div class="cart-footer" id="cart-footer" style="display:none">
-    <div class="cart-total-row"><span>Sous-total</span><span id="cart-subtotal">0 FCFA</span></div>
-    <div class="cart-total-row"><span>Livraison</span><span>Calculée à la commande</span></div>
-    <div class="cart-total-grand"><span>Total</span><span id="cart-total">0 FCFA</span></div>
-    <button class="btn-primary" style="width:100%;text-align:center;margin-top:0.5rem" onclick="openCheckout()">Passer la commande →</button>
-  </div>
-</div>
-
-<!-- ═══════════════ CHECKOUT ═══════════════ -->
-<div class="modal-overlay" id="checkout-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeCheckout()" aria-label="Fermer">✕</button>
-    <div id="checkout-content"></div>
-  </div>
-</div>
-
-<!-- ═══════════════ VUE RAPIDE ═══════════════ -->
+<!-- ═══════════════ TUNNEL DE COMMANDE (article → coordonnées → WhatsApp) ═══════════════ -->
 <div class="modal-overlay" id="qv-modal">
   <div class="modal wide">
     <button class="modal-close" onclick="closeQuick()" aria-label="Fermer">✕</button>
@@ -1455,7 +1418,7 @@ function renderGrid(genre) {
           ${p.ancien ? `<span class="product-old-price">${formatPrix(p.ancien)}</span>` : ''}
         </div>
         <div class="product-actions">
-          <button class="btn-cart" onclick="addToCart(${p.id},null,this)">Ajouter au panier</button>
+          <button class="btn-cart" onclick="openQuick(${p.id})">Commander</button>
           <button class="btn-wish" onclick="this.classList.toggle('liked');this.textContent=this.classList.contains('liked')?'♥':'♡'" aria-label="Favoris">♡</button>
         </div>
       </div>
@@ -1496,26 +1459,106 @@ function filterCat(genre, cat) {
 }
 
 // ══════════════════════════════════════════
-// VUE RAPIDE
+// PANIER (données — pas d'interface séparée)
 // ══════════════════════════════════════════
-let qvSize = null, qvQty = 1, qvId = null, qvColor = '';
+let panier = [];
 
 function findProduit(id) { return [...produits.homme, ...produits.femme].find(p => p.id===id); }
+
+function addToCart(id, taille, btn, qty, couleur) {
+  const p = findProduit(id);
+  if (!p) return null;
+  qty = qty || 1;
+  couleur = (couleur || '').trim();
+  const key = id + '|' + (taille || '') + '|' + couleur.toLowerCase();
+  const ex = panier.find(i => i.key===key);
+  if (ex) ex.qty += qty; else panier.push({ key, id, taille, couleur, qty });
+  updateCartBadge(true);
+  if (btn) {
+    const orig = btn.textContent;
+    btn.classList.add('added'); btn.textContent = 'Ajouté ✓';
+    setTimeout(() => { btn.classList.remove('added'); btn.textContent = orig; }, 1400);
+  }
+  return key;
+}
+
+function updateCartBadge(pop) {
+  const badge = document.getElementById('cart-badge');
+  badge.textContent = panier.reduce((s,i)=>s+i.qty,0);
+  if (pop) { badge.classList.add('pop'); setTimeout(() => badge.classList.remove('pop'), 260); }
+}
+
+function cartTotal() {
+  return panier.reduce((s,i) => s + findProduit(i.id).prix * i.qty, 0);
+}
+
+// ══════════════════════════════════════════
+// TUNNEL DE COMMANDE — article → coordonnées → WhatsApp
+// Une seule fenêtre, deux étapes guidées, jamais de détour par un panier séparé.
+// ══════════════════════════════════════════
+const BOUTIQUE_WHATSAPP = '2290196685554';
+let qvSize = null, qvQty = 1, qvId = null, qvColor = '';
+let qvFlowStep = 'article';   // 'article' | 'coordonnees' | 'success'
+let qvPendingKey = null;      // clé de l'article ajouté pendant cette session du tunnel (permet le retour arrière)
+let qvLastOrderUrl = null;
 
 function openQuick(id) {
   const p = findProduit(id);
   if (!p) return;
-  qvId = id; qvSize = null; qvQty = 1; qvColor = '';
-  renderQuick(p);
+  qvId = id; qvSize = null; qvQty = 1; qvColor = ''; qvFlowStep = 'article'; qvPendingKey = null;
   document.getElementById('qv-modal').classList.add('open');
+  renderQvModal();
 }
 function closeQuick() { document.getElementById('qv-modal').classList.remove('open'); }
 
-function renderQuick(p) {
+// Ouvre directement l'étape « coordonnées » (bouton panier de la nav) si des articles ont déjà été choisis.
+function openOrderPanel() {
+  if (!panier.length) {
+    showToast('Choisissez d’abord un article ✨');
+    document.getElementById('catalogue').scrollIntoView({ behavior: 'smooth' });
+    return;
+  }
+  qvPendingKey = null;
+  qvFlowStep = 'coordonnees';
+  document.getElementById('qv-modal').classList.add('open');
+  renderQvModal();
+}
+
+function renderQvModal() {
+  const box = document.querySelector('#qv-modal .modal');
+  if (qvFlowStep === 'article') {
+    box.classList.add('wide');
+    renderQvArticleStep();
+  } else if (qvFlowStep === 'coordonnees') {
+    box.classList.remove('wide');
+    renderQvCoordonneesStep();
+  } else {
+    box.classList.remove('wide');
+    renderQvSuccessStep();
+  }
+}
+
+function wizardHead(step, backButton) {
+  const isStep1 = step === 1;
+  return `
+    <div class="wizard-head">
+      ${backButton ? `<button class="wizard-back" onclick="qvBackToArticle()">← Modifier mon article</button>` : ''}
+      <div class="wizard-progress">
+        <span class="wizard-dot ${isStep1 ? 'active' : 'done'}">${isStep1 ? '1' : '✓'}</span>
+        <span class="wizard-bar ${isStep1 ? '' : 'done'}"><span class="wizard-bar-fill"></span></span>
+        <span class="wizard-dot ${isStep1 ? '' : 'active'}">2</span>
+      </div>
+      <p class="wizard-label">Étape ${isStep1 ? '1' : '2'} sur 2 — ${isStep1 ? 'Votre article' : 'Vos coordonnées'}</p>
+    </div>`;
+}
+
+function renderQvArticleStep() {
+  const p = findProduit(qvId);
   document.getElementById('qv-content').innerHTML = `
     <div class="qv-grid">
       <div class="qv-img"><img src="${imgUrl(p.photo)}" alt="${p.nom}"></div>
       <div class="qv-body">
+        ${wizardHead(1, false)}
         ${p.badge ? `<span class="qv-badge">${p.badge==='new'?'Nouveau':'Solde'}</span>` : ''}
         <h3 class="qv-name">${p.nom}</h3>
         <p class="qv-sub">${p.sous}</p>
@@ -1536,141 +1579,75 @@ function renderQuick(p) {
             <span>${qvQty}</span>
             <button onclick="qvSetQty(1)" aria-label="Augmenter">+</button>
           </div>
-          <button class="btn-primary" style="flex:1" onclick="qvAddToCart()">Ajouter · ${formatPrix(p.prix * qvQty)}</button>
+          <button class="btn-primary" style="flex:1" onclick="qvContinue()">Continuer · ${formatPrix(p.prix * qvQty)} →</button>
         </div>
         <p class="qv-note"><b>Fait main à Cotonou.</b> Pointure incertaine ? Chelsea vous conseille sur WhatsApp avant expédition.</p>
       </div>
     </div>`;
 }
-function qvSelectSize(t) { qvSize = (qvSize===t ? null : t); renderQuick(findProduit(qvId)); }
-function qvSetQty(d) { qvQty = Math.max(1, Math.min(9, qvQty + d)); renderQuick(findProduit(qvId)); }
-function qvAddToCart() {
-  addToCart(qvId, qvSize, null, qvQty, qvColor.trim());
-  closeQuick();
+function qvSelectSize(t) { qvSize = (qvSize===t ? null : t); renderQvArticleStep(); }
+function qvSetQty(d) { qvQty = Math.max(1, Math.min(9, qvQty + d)); renderQvArticleStep(); }
+
+function qvContinue() {
+  qvPendingKey = addToCart(qvId, qvSize, null, qvQty, qvColor.trim());
+  qvFlowStep = 'coordonnees';
+  renderQvModal();
 }
 
-// ══════════════════════════════════════════
-// PANIER
-// ══════════════════════════════════════════
-let panier = [];
-
-function addToCart(id, taille, btn, qty, couleur) {
-  const p = findProduit(id);
-  if (!p) return;
-  qty = qty || 1;
-  couleur = (couleur || '').trim();
-  const key = id + '|' + (taille || '') + '|' + couleur.toLowerCase();
-  const ex = panier.find(i => i.key===key);
-  if (ex) ex.qty += qty; else panier.push({ key, id, taille, couleur, qty });
-  updateCartBadge(true);
-  showToast(`${p.nom}${taille ? ' · P.'+taille : ''} ajouté ✓`);
-  if (btn) {
-    const orig = btn.textContent;
-    btn.classList.add('added'); btn.textContent = 'Ajouté ✓';
-    setTimeout(() => { btn.classList.remove('added'); btn.textContent = orig; }, 1400);
-  }
-  if (document.getElementById('cart-panel').classList.contains('open')) renderCart();
+function qvBackToArticle() {
+  if (qvPendingKey) { panier = panier.filter(i => i.key !== qvPendingKey); updateCartBadge(); qvPendingKey = null; }
+  qvFlowStep = 'article';
+  renderQvModal();
 }
 
-function updateCartBadge(pop) {
-  const badge = document.getElementById('cart-badge');
-  badge.textContent = panier.reduce((s,i)=>s+i.qty,0);
-  if (pop) { badge.classList.add('pop'); setTimeout(() => badge.classList.remove('pop'), 260); }
-}
-
-function openCart() {
-  document.getElementById('cart-overlay').classList.add('open');
-  document.getElementById('cart-panel').classList.add('open');
-  renderCart();
-}
-function closeCart() {
-  document.getElementById('cart-overlay').classList.remove('open');
-  document.getElementById('cart-panel').classList.remove('open');
-}
-
-function cartQty(key, d) {
+function qvLineQty(key, d) {
   const item = panier.find(i => i.key===key);
   if (!item) return;
   item.qty += d;
   if (item.qty <= 0) panier = panier.filter(i => i.key!==key);
-  updateCartBadge(); renderCart();
+  updateCartBadge();
+  if (!panier.length) { closeQuick(); showToast('Panier vidé'); return; }
+  renderQvCoordonneesStep();
 }
-
-function removeFromCart(key) {
+function qvRemoveLine(key) {
   panier = panier.filter(i => i.key!==key);
-  updateCartBadge(); renderCart();
+  updateCartBadge();
+  if (!panier.length) { closeQuick(); showToast('Article retiré — panier vide'); return; }
+  renderQvCoordonneesStep();
 }
 
-function cartTotal() {
-  return panier.reduce((s,i) => s + findProduit(i.id).prix * i.qty, 0);
-}
-
-function renderCart() {
-  const list = document.getElementById('cart-items-list');
-  const footer = document.getElementById('cart-footer');
-  if (!panier.length) {
-    list.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛍️</div><p>Votre panier est vide</p></div>`;
-    footer.style.display = 'none'; return;
-  }
-  footer.style.display = '';
-  list.innerHTML = panier.map(item => {
-    const p = findProduit(item.id);
-    return `
-    <div class="cart-item">
-      <div class="cart-item-img">
-        <img src="${imgUrl(p.photo)}" alt="${p.nom}" onerror="this.style.display='none'">
-      </div>
-      <div class="cart-item-info">
-        <div class="cart-item-name">${p.nom}</div>
-        <div class="cart-item-detail">${p.sous}${item.taille ? ' · Pointure ' + item.taille : ''}${item.couleur ? ' · ' + item.couleur : ''}</div>
-        <button class="cart-item-remove" onclick="removeFromCart('${item.key}')">Retirer</button>
-        <div class="cart-item-bottom">
-          <div class="qty-stepper">
-            <button onclick="cartQty('${item.key}',-1)" aria-label="Diminuer">−</button>
-            <span>${item.qty}</span>
-            <button onclick="cartQty('${item.key}',1)" aria-label="Augmenter">+</button>
-          </div>
-          <span class="cart-item-price">${formatPrix(p.prix * item.qty)}</span>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  document.getElementById('cart-subtotal').textContent = formatPrix(cartTotal());
-  document.getElementById('cart-total').textContent = formatPrix(cartTotal());
-}
-
-// ══════════════════════════════════════════
-// CHECKOUT → COMMANDE DIRECTE SUR WHATSAPP
-// ══════════════════════════════════════════
-const BOUTIQUE_WHATSAPP = '2290196685554';
-
-function openCheckout() {
-  closeCart();
-  document.getElementById('checkout-modal').classList.add('open');
-  renderCheckout();
-}
-function closeCheckout() { document.getElementById('checkout-modal').classList.remove('open'); }
-
-function renderCheckout() {
-  const c = document.getElementById('checkout-content');
+function renderQvCoordonneesStep() {
   const itemsHtml = panier.map(item => {
     const p = findProduit(item.id);
     const details = [];
     if (item.taille) details.push('Pointure ' + item.taille);
     if (item.couleur) details.push(item.couleur);
-    return `<div class="checkout-item-row">
-      <span>${p.nom}${details.length ? ' · ' + details.join(', ') : ''} × ${item.qty}</span>
-      <span>${formatPrix(p.prix * item.qty)}</span>
+    return `
+    <div class="order-line">
+      <div class="order-line-info">
+        <div class="order-line-name">${p.nom}</div>
+        <div class="order-line-detail">${details.length ? details.join(', ') + ' · ' : ''}${formatPrix(p.prix)} / unité</div>
+        <button class="order-line-remove" onclick="qvRemoveLine('${item.key}')">Retirer</button>
+      </div>
+      <div class="order-line-right">
+        <div class="qty-stepper">
+          <button onclick="qvLineQty('${item.key}',-1)" aria-label="Diminuer">−</button>
+          <span>${item.qty}</span>
+          <button onclick="qvLineQty('${item.key}',1)" aria-label="Augmenter">+</button>
+        </div>
+        <span class="order-line-price">${formatPrix(p.prix * item.qty)}</span>
+      </div>
     </div>`;
   }).join('');
 
-  c.innerHTML = `
-    <h2 class="modal-title">Vos coordonnées</h2>
-    <div class="checkout-summary">
+  document.getElementById('qv-content').innerHTML = `
+    ${wizardHead(2, !!qvPendingKey)}
+    <div class="order-summary">
       ${itemsHtml}
-      <div class="checkout-summary-total"><span>Total</span><span>${formatPrix(cartTotal())}</span></div>
+      <div class="order-summary-total"><span>Total</span><span>${formatPrix(cartTotal())}</span></div>
     </div>
-    <form id="order-form" onsubmit="submitOrderForm(event)">
+    <button type="button" class="order-add-more" onclick="closeQuick()">+ Ajouter un autre article</button>
+    <form id="order-form" onsubmit="submitOrderForm(event)" style="margin-top:1.1rem">
       <div class="form-group"><label>Nom complet</label><input required placeholder="Jean Dupont" id="f-nom"></div>
       <div class="form-group"><label>Ville</label><input required placeholder="Cotonou" id="f-ville"></div>
       <div class="form-group"><label>Téléphone / WhatsApp</label><input required type="tel" placeholder="+229 0196685554" id="f-tel"></div>
@@ -1702,14 +1679,15 @@ function submitOrderForm(e) {
   if (!nom || !ville || !tel) return;
 
   const message = buildOrderMessage(nom, ville, tel);
-  const url = `https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(message)}`;
-  window.open(url, '_blank', 'noopener');
-  showOrderSuccess(url);
+  qvLastOrderUrl = `https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  window.open(qvLastOrderUrl, '_blank', 'noopener');
+  panier = []; updateCartBadge(); qvPendingKey = null;
+  qvFlowStep = 'success';
+  renderQvModal();
 }
 
-function showOrderSuccess(waUrl) {
-  const c = document.getElementById('checkout-content');
-  c.innerHTML = `
+function renderQvSuccessStep() {
+  document.getElementById('qv-content').innerHTML = `
     <div class="order-success">
       <div class="success-icon">📲</div>
       <h2 class="success-title">C'est presque fini !</h2>
@@ -1717,11 +1695,10 @@ function showOrderSuccess(waUrl) {
         WhatsApp s'est ouvert dans un nouvel onglet avec votre commande déjà rédigée.<br><br>
         Il ne vous reste plus qu'à appuyer sur <strong>Envoyer</strong> pour la transmettre à notre équipe.
       </p>
-      <p style="margin-top:1rem"><a href="${waUrl}" target="_blank" rel="noopener" style="color:var(--or);font-size:0.78rem;letter-spacing:0.05em">L'onglet ne s'est pas ouvert ? Cliquez ici →</a></p>
+      ${qvLastOrderUrl ? `<p style="margin-top:1rem"><a href="${qvLastOrderUrl}" target="_blank" rel="noopener" style="color:var(--or);font-size:0.78rem;letter-spacing:0.05em">L'onglet ne s'est pas ouvert ? Cliquez ici →</a></p>` : ''}
       <br>
-      <button class="btn-primary" onclick="panier=[];updateCartBadge();closeCheckout()">Retour à la boutique</button>
+      <button class="btn-primary" onclick="closeQuick()">Retour à la boutique</button>
     </div>`;
-  panier = []; updateCartBadge();
 }
 
 // ══════════════════════════════════════════
@@ -1850,7 +1827,7 @@ document.getElementById('mobile-nav').addEventListener('click', e => {
   if (e.target === document.getElementById('mobile-nav')) closeMobileNav();
 });
 document.addEventListener('keydown', e => {
-  if (e.key==='Escape') { closeMobileNav(); closeCart(); closeCheckout(); closeQuick(); }
+  if (e.key==='Escape') { closeMobileNav(); closeQuick(); }
 });
 
 // Message d'accueil Chelsea
