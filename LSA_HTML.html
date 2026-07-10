@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LSA — Luxury Artisanal · Claquettes & Pochettes en cuir · Cotonou</title>
-<meta name="description" content="LSA — Luxury Artisanal. Claquettes, sandales, mules & pochettes en cuir fait main à Cotonou, Bénin. Livraison Afrique & international.">
+<title>LSA — Luxury Artisanal · Claquettes, Sandales & Pochettes · Cotonou</title>
+<meta name="description" content="LSA — Luxury Artisanal. Claquettes, sandales, mules & pochettes façonnées à la main à Cotonou, Bénin. Livraison Afrique & international.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LSA — Luxury Artisanal · Cotonou">
-<meta property="og:description" content="Claquettes, sandales & pochettes en cuir fait main. Le cuir, porté comme un art.">
+<meta property="og:description" content="Claquettes, sandales & pochettes façonnées à la main. L'artisanat, porté comme un art.">
 <meta property="og:url" content="https://lsa-boutique.vercel.app/">
 <meta property="og:image" content="https://lsa-boutique.vercel.app/public/hero%20Image/WhatsApp%20Image%202026-06-15%20at%2015.49.33.jpeg">
 <meta property="og:locale" content="fr_FR">
@@ -17,7 +17,7 @@
   "@context": "https://schema.org",
   "@type": "Store",
   "name": "LSA — Luxury Artisanal",
-  "description": "Claquettes, sandales, mules et pochettes en cuir fait main.",
+  "description": "Claquettes, sandales, mules et pochettes façonnées à la main.",
   "address": { "@type": "PostalAddress", "addressLocality": "Cotonou", "addressCountry": "BJ" },
   "telephone": "+2290196685554",
   "url": "https://lsa-boutique.vercel.app/",
@@ -716,25 +716,49 @@
   }
   .modal-overlay.open { display: flex; }
   .modal {
-    background: var(--creme); padding: 2.5rem; width: 100%; max-width: 560px;
-    max-height: 92vh; max-height: 92dvh; overflow-y: auto; -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain; position: relative;
+    background: var(--creme); width: 100%; max-width: 560px;
+    max-height: 92vh; max-height: 92dvh; position: relative;
     animation: modalIn 0.35s var(--ease);
+    display: flex; flex-direction: column; overflow: hidden;
   }
   @keyframes modalIn { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
-  .modal.wide { max-width: 820px; padding: 0; overflow-y: auto; overflow-x: hidden; }
+  .modal.wide { max-width: 820px; }
+  .modal-scroll {
+    padding: 2.5rem; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; flex: 1; min-height: 0;
+  }
+  .modal.wide .modal-scroll { padding: 0; }
+  .modal-cta-bar {
+    flex-shrink: 0; padding: 1.1rem 2.2rem;
+    border-top: 1px solid var(--gris-clair); background: var(--creme);
+  }
+  .modal-cta-bar:empty { display: none; }
   .modal-title { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 300; margin-bottom: 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid var(--gris-clair); }
   .form-group { margin-bottom: 1.1rem; }
   .form-group label { display: block; font-size: 0.64rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gris); margin-bottom: 0.4rem; }
   .form-group input, .form-group select {
     width: 100%; padding: 0.72rem 0.9rem; border: 1px solid var(--gris-clair);
     background: white; font-size: 0.88rem; font-family: 'Inter', sans-serif;
-    color: var(--texte); outline: none; transition: border-color 0.2s;
+    color: var(--texte); outline: none; transition: border-color 0.2s, background 0.2s;
   }
   .form-group input:focus, .form-group select:focus { border-color: var(--or); }
+  .form-group input.error { border-color: #b23b3b; background: rgba(178,59,59,0.05); }
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
   .wa-submit { display: flex; align-items: center; justify-content: center; }
+  .qv-sticky-btn { width: 100%; animation: ctaPulse 2.4s ease-in-out infinite; }
+  .qv-sticky-btn:hover { animation-play-state: paused; }
+  @keyframes ctaPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(184,151,90,0.5); }
+    50% { box-shadow: 0 0 0 9px rgba(184,151,90,0); }
+  }
+  .qv-sticky-btn.shake { animation: ctaShake 0.4s ease; }
+  @keyframes ctaShake {
+    10%, 90% { transform: translateX(-2px); }
+    20%, 80% { transform: translateX(3px); }
+    30%, 50%, 70% { transform: translateX(-5px); }
+    40%, 60% { transform: translateX(5px); }
+  }
   .checkout-note {
     font-size: 0.7rem; color: var(--gris); line-height: 1.7;
     margin-top: 0.9rem; text-align: center;
@@ -981,8 +1005,8 @@
 
   <div class="hero-content">
     <p class="hero-eyebrow" id="hero-eyebrow">LSA — Luxury Artisanal · Cotonou</p>
-    <h1 class="hero-title" id="hero-title">Le cuir,<br>porté comme un <em>art</em></h1>
-    <p class="hero-sub">Claquettes, sandales & pochettes façonnées à la main. Chaque pièce LSA célèbre l'artisanat du cuir et l'élégance au quotidien.</p>
+    <h1 class="hero-title" id="hero-title">L'artisanat,<br>porté comme un <em>art</em></h1>
+    <p class="hero-sub">Claquettes, sandales & pochettes façonnées à la main. Chaque pièce LSA célèbre l'exigence artisanale et l'élégance au quotidien.</p>
     <div class="hero-btns">
       <a class="btn-primary" href="#packs">Découvrir les packs</a>
       <a class="btn-outline" href="#" onclick="openChat();return false;">Parler à Chelsea</a>
@@ -1020,14 +1044,14 @@
 <section class="atelier" id="atelier">
   <div class="atelier-inner">
     <div class="atelier-img reveal">
-      <img src="" data-src="image pack/WhatsApp Image 2026-06-15 at 15.49.32.jpeg" alt="Atelier LSA — ensemble claquettes et pochette en cuir" loading="lazy" id="atelier-photo">
+      <img src="" data-src="image pack/WhatsApp Image 2026-06-15 at 15.49.32.jpeg" alt="Atelier LSA — ensemble claquettes et pochette assortie" loading="lazy" id="atelier-photo">
     </div>
     <div class="atelier-txt reveal d1">
       <p class="section-eyebrow">Notre savoir-faire</p>
       <h2 class="section-title">Chaque paire naît<br>entre des <em>mains expertes</em></h2>
-      <p>À Cotonou, nos artisans perpétuent un savoir-faire du cuir transmis de génération en génération. Découpe, teinture, couture : chaque étape est réalisée à la main, sans compromis.</p>
+      <p>À Cotonou, nos artisans perpétuent un savoir-faire transmis de génération en génération. Découpe, assemblage, finition : chaque étape est réalisée à la main, sans compromis.</p>
       <div class="atelier-points">
-        <div class="atelier-point"><span class="n">01</span><span class="t">Cuir véritable sélectionné pièce par pièce pour son grain et sa souplesse</span></div>
+        <div class="atelier-point"><span class="n">01</span><span class="t">Matières nobles sélectionnées pièce par pièce pour leur qualité et leur tenue</span></div>
         <div class="atelier-point"><span class="n">02</span><span class="t">Assemblage et couture main — aucune production en série</span></div>
         <div class="atelier-point"><span class="n">03</span><span class="t">Contrôle qualité individuel avant chaque expédition</span></div>
       </div>
@@ -1135,7 +1159,8 @@
 <div class="modal-overlay" id="qv-modal">
   <div class="modal wide">
     <button class="modal-close" onclick="closeQuick()" aria-label="Fermer">✕</button>
-    <div id="qv-content"></div>
+    <div id="qv-content" class="modal-scroll"></div>
+    <div id="qv-cta-bar" class="modal-cta-bar"></div>
   </div>
 </div>
 
@@ -1179,52 +1204,54 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 // DONNÉES
 // ══════════════════════════════════════════
 const heroImages = [
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.49.33.jpeg",     titre: "Le cuir,<br>porté comme un <em>art</em>",       sous: "LSA — Luxury Artisanal · Cotonou" },
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg", titre: "L'élégance<br>dans chaque <em>détail</em>",      sous: "Claquettes & mules cuir grainé" },
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg", titre: "Artisanat<br>& <em>raffinement</em>",            sous: "Ensembles cuir premium — Femme" },
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (3).jpeg", titre: "La couleur<br>du <em>luxe</em>",                 sous: "Claquettes cuir — Collection exclusive" }
+  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.49.33.jpeg",     titre: "L'artisanat,<br>porté comme un <em>art</em>",    sous: "LSA — Luxury Artisanal · Cotonou" },
+  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg", titre: "L'élégance<br>dans chaque <em>détail</em>",      sous: "Claquettes & mules — finition grainée" },
+  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg", titre: "Artisanat<br>& <em>raffinement</em>",            sous: "Ensembles premium — Femme" },
+  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (3).jpeg", titre: "La couleur<br>du <em>luxe</em>",                 sous: "Claquettes — Collection exclusive" }
 ];
 
 const marqueeItems = [
-  '<b>Cuir véritable</b>', '<b>Fait main au Bénin</b>', '<b>Livraison Afrique & International</b>',
+  '<b>Matières nobles</b>', '<b>Fait main au Bénin</b>', '<b>Livraison Afrique & International</b>',
   '<b>Paiement à la livraison</b>', '<b>Retours sous 14 jours</b>', '<b>Mobile Money accepté</b>'
 ];
 
 const produits = {
   homme: [
-    { id:1,  nom:"Croisé Noir 01",                 sous:"Sandale cuir noir tressé",           prix:11000, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (1).jpeg" },
-    { id:2,  nom:"Ensemble Snake",                  sous:"Duo claquettes cuir snake",          prix:19900, badge:"new", cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.09.jpeg" },
+    { id:1,  nom:"Croisé Noir 01",                 sous:"Sandale noire tressée",           prix:11000, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (1).jpeg" },
+    { id:2,  nom:"Ensemble Snake",                  sous:"Duo claquettes façon snake",         prix:19900, badge:"new", cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.09.jpeg" },
     { id:3,  nom:"Ensemble CIV · Chaussures + Sac", sous:"Claquettes + pochette assortie",     prix:17500, cat:"sacs",  photo:"images/WhatsApp Image 2026-06-15 at 15.48.11 (2).jpeg" },
-    { id:4,  nom:"H Kaki",                          sous:"Claquette cuir kaki",                prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.33 (2).jpeg" },
-    { id:5,  nom:"Ensemble H",                      sous:"Duo claquettes cuir grainé",         prix:19900, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg" },
+    { id:4,  nom:"H Kaki",                          sous:"Claquette kaki",                prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.33 (2).jpeg" },
+    { id:5,  nom:"Ensemble H",                      sous:"Duo claquettes grainées",            prix:19900, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg" },
     { id:6,  nom:"Noire Tapettes",                  sous:"Claquette double bride noire",       prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.13 (2).jpeg" },
     { id:7,  nom:"Croiser Noir + Sac",              sous:"Claquette croisée + pochette noire", prix:17500, cat:"sacs",  photo:"images/WhatsApp Image 2026-06-15 at 15.49.33.jpeg" },
-    { id:8,  nom:"Croiser Noir 2",                  sous:"Claquette croisée cuir gris",        prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.12 (1).jpeg" },
+    { id:8,  nom:"Croiser Noir 2",                  sous:"Claquette croisée grise",        prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.12 (1).jpeg" },
     { id:9,  nom:"Ensemble H & C",                  sous:"Duo claquettes H + croisée",         prix:24000, badge:"new", cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg" },
     { id:10, nom:"Croiser CIV",                     sous:"Claquette croisée CIV",              prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11.jpeg" },
   ],
   femme: [
     { id:11, nom:"Ensemble LV Blanche",             sous:"Duo claquettes blanc & sable",       prix:19900, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg" },
-    { id:12, nom:"Blanc Noir",                      sous:"Claquette bicolore blanc & cuir",    prix:19900, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.33 (1).jpeg" },
-    { id:13, nom:"Croco Boubou",                    sous:"Claquette cuir façon croco",         prix:13000, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (3).jpeg" },
-    { id:14, nom:"LV Bleue",                        sous:"Claquette cuir premium",             prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11 (4).jpeg" },
-    { id:15, nom:"Ensemble NC",                     sous:"Duo claquettes cuir naturel",        prix:19900, cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.13 (1).jpeg" },
-    { id:16, nom:"Ensemble NC · Pack",              sous:"Duo claquettes + pochette cuir",     prix:17500, ancien:19900, badge:"solde", cat:"sacs", photo:"images/WhatsApp Image 2026-06-15 at 15.49.29.jpeg" },
+    { id:12, nom:"Blanc Noir",                      sous:"Claquette bicolore blanc & marron",    prix:19900, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.33 (1).jpeg" },
+    { id:13, nom:"Croco Boubou",                    sous:"Claquette façon croco",         prix:13000, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (3).jpeg" },
+    { id:14, nom:"LV Bleue",                        sous:"Claquette premium",             prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11 (4).jpeg" },
+    { id:15, nom:"Ensemble NC",                     sous:"Duo claquettes ton naturel",        prix:19900, cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.13 (1).jpeg" },
+    { id:16, nom:"Ensemble NC · Pack",              sous:"Duo claquettes + pochette assortie",     prix:17500, ancien:19900, badge:"solde", cat:"sacs", photo:"images/WhatsApp Image 2026-06-15 at 15.49.29.jpeg" },
   ]
 };
 
 const packs = [
-  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.49.33.jpeg",     tag:"Édition Atelier", nom:"Croiser Noir + Sac",  prix:17500, desc:"Claquette croisée cuir + pochette assortie", tall:true,  genre:"homme" },
-  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg", tag:"Pièce signature", nom:"Ensemble H",          prix:19900, desc:"Duo claquettes cuir grainé",                 tall:false, genre:"homme" },
+  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.49.33.jpeg",     tag:"Édition Atelier", nom:"Croiser Noir + Sac",  prix:17500, desc:"Claquette croisée + pochette assortie", tall:true,  genre:"homme" },
+  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg", tag:"Pièce signature", nom:"Ensemble H",          prix:19900, desc:"Duo claquettes grainées",                    tall:false, genre:"homme" },
   { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg", tag:"Best-seller",     nom:"Ensemble LV Blanche", prix:19900, desc:"Duo claquettes blanc & sable",               tall:false, genre:"femme" },
-  { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.09.jpeg",     tag:"Nouveauté",       nom:"Ensemble Snake",      prix:19900, desc:"Duo claquettes cuir snake",                  tall:false, genre:"homme" },
-  { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg", tag:"Duo exclusif",    nom:"Ensemble H & C",      prix:24000, desc:"Claquettes H + croisée cuir",                tall:false, genre:"homme" },
+  { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.09.jpeg",     tag:"Nouveauté",       nom:"Ensemble Snake",      prix:19900, desc:"Duo claquettes façon snake",                 tall:false, genre:"homme" },
+  { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg", tag:"Duo exclusif",    nom:"Ensemble H & C",      prix:24000, desc:"Claquettes H + croisée",                     tall:false, genre:"homme" },
 ];
 
 const temoignages = [
-  { txt: "Qualité irréprochable. Le cuir est souple, la finition parfaite. On sent le travail artisanal dès qu'on ouvre le colis.", nom: "Aurel D.", ville: "Cotonou, Bénin" },
-  { txt: "Commandé depuis Abidjan, livré en 5 jours. L'ensemble claquettes + pochette est encore plus beau en vrai.", nom: "Mariam K.", ville: "Abidjan, Côte d'Ivoire" },
-  { txt: "Le service client sur WhatsApp est au top — conseils de pointure précis, suivi impeccable. Je recommande LSA les yeux fermés.", nom: "Jean-Luc S.", ville: "Paris, France" },
+  { txt: "Je viens de recevoir, c'est très joli, j'ai vraiment aimé ! Je veux le marron pour madame et moi.", nom: "Oluwafemi O." },
+  { txt: "J'ai bien reçu le colis. Et franchement, c'est top : la matière, le design, j'ai adoré.", nom: "Hermann Billy" },
+  { txt: "J'ai reçu la commande. Pointure respectée. Parfait. J'aime et je valide.", nom: "Codjo T." },
+  { txt: "J'ai reçu la commande et j'apprécie la qualité.", nom: "Eric Djossou" },
+  { txt: "Juste vous informer que j'ai reçu mon colis, merci. La pointure c'est top.", nom: "Naf" },
 ];
 
 const annonces = [
@@ -1370,14 +1397,14 @@ function renderPacks() {
 // ══════════════════════════════════════════
 function renderAvis() {
   document.getElementById('avis-grid').innerHTML = temoignages.map((t, i) => `
-    <div class="avis-card reveal d${i+1}">
+    <div class="avis-card reveal d${(i%3)+1}">
       <div class="avis-stars">★ ★ ★ ★ ★</div>
       <p class="avis-txt">« ${t.txt} »</p>
       <div class="avis-auteur">
         <div class="avis-avatar">${t.nom.charAt(0)}</div>
         <div>
           <div class="avis-nom">${t.nom}</div>
-          <div class="avis-ville">${t.ville}</div>
+          <div class="avis-ville">Client LSA · Commande confirmée</div>
         </div>
       </div>
     </div>`).join('');
@@ -1573,17 +1600,16 @@ function renderQvArticleStep() {
         <div class="qv-label">Couleur souhaitée <span style="opacity:.6">(optionnel, si plusieurs disponibles)</span></div>
         <input class="qv-color-input" id="qv-color-input" type="text" placeholder="Ex : noir, kaki, sable…" value="${qvColor.replace(/"/g,'&quot;')}" oninput="qvColor=this.value">
         <div class="qv-label">Quantité</div>
-        <div class="qv-qty-row">
-          <div class="qty-stepper">
-            <button onclick="qvSetQty(-1)" aria-label="Diminuer">−</button>
-            <span>${qvQty}</span>
-            <button onclick="qvSetQty(1)" aria-label="Augmenter">+</button>
-          </div>
-          <button class="btn-primary" style="flex:1" onclick="qvContinue()">Continuer · ${formatPrix(p.prix * qvQty)} →</button>
+        <div class="qty-stepper">
+          <button onclick="qvSetQty(-1)" aria-label="Diminuer">−</button>
+          <span>${qvQty}</span>
+          <button onclick="qvSetQty(1)" aria-label="Augmenter">+</button>
         </div>
         <p class="qv-note"><b>Fait main à Cotonou.</b> Pointure incertaine ? Chelsea vous conseille sur WhatsApp avant expédition.</p>
       </div>
     </div>`;
+  document.getElementById('qv-cta-bar').innerHTML = `
+    <button class="btn-primary qv-sticky-btn" onclick="qvContinue()">Continuer · ${formatPrix(p.prix * qvQty)} →</button>`;
 }
 function qvSelectSize(t) { qvSize = (qvSize===t ? null : t); renderQvArticleStep(); }
 function qvSetQty(d) { qvQty = Math.max(1, Math.min(9, qvQty + d)); renderQvArticleStep(); }
@@ -1648,14 +1674,33 @@ function renderQvCoordonneesStep() {
     </div>
     <button type="button" class="order-add-more" onclick="closeQuick()">+ Ajouter un autre article</button>
     <form id="order-form" onsubmit="submitOrderForm(event)" style="margin-top:1.1rem">
-      <div class="form-group"><label>Nom complet</label><input required placeholder="Jean Dupont" id="f-nom"></div>
-      <div class="form-group"><label>Ville</label><input required placeholder="Cotonou" id="f-ville"></div>
-      <div class="form-group"><label>Téléphone / WhatsApp</label><input required type="tel" placeholder="+229 0196685554" id="f-tel"></div>
-      <button type="submit" class="btn-primary wa-submit" style="width:100%">
-        <span style="margin-right:0.6rem">📱</span> Commander sur WhatsApp →
-      </button>
+      <div class="form-group"><label>Nom complet</label><input required placeholder="Jean Dupont" id="f-nom" oninvalid="qvFieldInvalid(event,this)" oninput="qvFieldClearError(this)"></div>
+      <div class="form-group"><label>Ville</label><input required placeholder="Cotonou" id="f-ville" oninvalid="qvFieldInvalid(event,this)" oninput="qvFieldClearError(this)"></div>
+      <div class="form-group"><label>Téléphone / WhatsApp</label><input required type="tel" placeholder="+229 0196685554" id="f-tel" oninvalid="qvFieldInvalid(event,this)" oninput="qvFieldClearError(this)"></div>
       <p class="checkout-note">Vous serez redirigé·e vers WhatsApp, votre commande déjà rédigée dans la discussion — il ne restera qu'à appuyer sur Envoyer.</p>
     </form>`;
+  document.getElementById('qv-cta-bar').innerHTML = `
+    <button type="submit" form="order-form" class="btn-primary qv-sticky-btn wa-submit" id="qv-submit-btn" onclick="qvInvalidHandled=false">
+      <span style="margin-right:0.6rem">📱</span> Commander sur WhatsApp →
+    </button>`;
+}
+
+let qvInvalidHandled = false;
+function qvFieldInvalid(e, el) {
+  e.preventDefault();
+  el.classList.add('error');
+  if (qvInvalidHandled) return;
+  qvInvalidHandled = true;
+  const btn = document.getElementById('qv-submit-btn');
+  if (btn) { btn.classList.remove('shake'); void btn.offsetWidth; btn.classList.add('shake'); }
+  showToast('Merci de remplir vos coordonnées avant de commander 🙏');
+  const scroller = document.getElementById('qv-content');
+  if (scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(() => { el.focus(); qvInvalidHandled = false; }, 350);
+}
+function qvFieldClearError(el) {
+  el.classList.remove('error');
+  el.setCustomValidity('');
 }
 
 function buildOrderMessage(nom, ville, tel) {
@@ -1696,9 +1741,9 @@ function renderQvSuccessStep() {
         Il ne vous reste plus qu'à appuyer sur <strong>Envoyer</strong> pour la transmettre à notre équipe.
       </p>
       ${qvLastOrderUrl ? `<p style="margin-top:1rem"><a href="${qvLastOrderUrl}" target="_blank" rel="noopener" style="color:var(--or);font-size:0.78rem;letter-spacing:0.05em">L'onglet ne s'est pas ouvert ? Cliquez ici →</a></p>` : ''}
-      <br>
-      <button class="btn-primary" onclick="closeQuick()">Retour à la boutique</button>
     </div>`;
+  document.getElementById('qv-cta-bar').innerHTML = `
+    <button class="btn-primary" style="width:100%" onclick="closeQuick()">Retour à la boutique</button>`;
 }
 
 // ══════════════════════════════════════════
@@ -1732,8 +1777,8 @@ function chelseaReply(msg) {
   if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
     return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
   if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales vont de 11 000 à 24 000 FCFA. Les ensembles (chaussures + pochette) sont entre 17 500 et 24 000 FCFA 😊";
-  if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, en cuir véritable soigneusement sélectionné 🧵. C'est tout l'esprit Luxury Artisanal.";
-  if (has('pochette','sac','clutch'))                      return "Nos pochettes cuir avec dragonne accompagnent parfaitement nos sandales 👝. Retrouvez-les dans l'onglet « Pochettes » du catalogue.";
+  if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
+  if (has('pochette','sac','clutch'))                      return "Nos pochettes avec dragonne accompagnent parfaitement nos sandales 👝. Retrouvez-les dans l'onglet « Pochettes » du catalogue.";
   if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Chelsea, votre conseillère. Comment puis-je vous aider ?";
   if (has('merci','super','parfait','génial','genial'))    return "Avec grand plaisir 🤍 N'hésitez pas pour toute question. Bel shopping chez LSA !";
   if (has('contact','whatsapp','téléphone','telephone','instagram','facebook','tiktok','réseau'))
