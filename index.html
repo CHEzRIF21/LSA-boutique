@@ -219,7 +219,7 @@
      HERO CAROUSEL
   ═══════════════════════════════════════ */
   #hero {
-    position: relative; height: 100vh; min-height: 620px;
+    position: relative; height: 100vh; height: 100svh; min-height: 620px;
     overflow: hidden; background: var(--noir);
     display: flex; align-items: flex-end;
   }
@@ -558,35 +558,46 @@
     background: var(--noir); padding: 5rem 3rem;
     position: relative; overflow: hidden;
   }
-  .avis-head { text-align: center; margin-bottom: 3rem; }
+  .avis-head { text-align: center; margin-bottom: 2.6rem; }
   .avis-head .section-title { color: var(--creme); }
-  .avis-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
-    max-width: 1180px; margin: 0 auto;
+  .avis-head p { margin-top: 0.9rem; font-size: 0.8rem; color: rgba(248,244,239,0.5); letter-spacing: 0.03em; }
+
+  /* Carrousel de captures WhatsApp réelles — mobile-first, défilement tactile */
+  .avis-carousel {
+    display: flex; align-items: center; gap: 1.1rem;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 0.4rem 1.4rem 1.4rem;
+    scrollbar-width: none;
   }
-  .avis-card {
-    background: rgba(248,244,239,0.035);
-    border: 1px solid rgba(184,151,90,0.18);
-    padding: 2rem 1.8rem;
+  .avis-carousel::-webkit-scrollbar { display: none; }
+  .avis-shot {
+    flex: 0 0 min(440px, 86vw);
+    scroll-snap-align: center;
+    border: 1px solid rgba(184,151,90,0.3);
+    border-radius: 12px; overflow: hidden;
+    background: #111;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     transition: border-color 0.3s, transform 0.3s var(--ease);
   }
-  .avis-card:hover { border-color: rgba(184,151,90,0.5); transform: translateY(-4px); }
-  .avis-stars { color: var(--or); font-size: 0.8rem; letter-spacing: 0.25em; margin-bottom: 1.1rem; }
-  .avis-txt {
-    font-family: 'Cormorant Garamond', serif; font-style: italic;
-    font-size: 1.08rem; line-height: 1.65; color: rgba(248,244,239,0.85);
-    margin-bottom: 1.4rem;
+  .avis-shot:hover { border-color: rgba(184,151,90,0.65); transform: translateY(-4px); }
+  .avis-shot img { width: 100%; height: auto; display: block; }
+  .avis-nav {
+    display: flex; justify-content: center; align-items: center; gap: 0.8rem;
+    margin-top: 1.2rem;
   }
-  .avis-auteur { display: flex; align-items: center; gap: 0.8rem; }
-  .avis-avatar {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: rgba(184,151,90,0.2); color: var(--or-pale);
+  .avis-arrow {
+    background: rgba(248,244,239,0.05); border: 1px solid rgba(184,151,90,0.3);
+    color: var(--or-pale); width: 44px; height: 44px; border-radius: 50%;
+    cursor: pointer; font-size: 0.95rem;
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif; font-size: 1rem;
-    border: 1px solid rgba(184,151,90,0.4);
+    transition: background 0.2s, border-color 0.2s;
   }
-  .avis-nom { font-size: 0.78rem; color: var(--creme); font-weight: 500; }
-  .avis-ville { font-size: 0.62rem; color: rgba(248,244,239,0.4); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 0.15rem; }
+  .avis-arrow:hover { background: rgba(184,151,90,0.2); border-color: var(--or); }
+  .avis-hint {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: rgba(248,244,239,0.35);
+  }
 
   /* ═══════════════════════════════════════
      WHATSAPP CTA
@@ -675,11 +686,11 @@
   ═══════════════════════════════════════ */
   .qty-stepper { display: inline-flex; align-items: center; border: 1px solid var(--gris-clair); background: white; }
   .qty-stepper button {
-    width: 26px; height: 26px; background: none; border: none; cursor: pointer;
-    font-size: 0.9rem; color: var(--gris); transition: color 0.15s; line-height: 1;
+    width: 36px; height: 36px; background: none; border: none; cursor: pointer;
+    font-size: 1rem; color: var(--gris); transition: color 0.15s; line-height: 1;
   }
   .qty-stepper button:hover { color: var(--or); }
-  .qty-stepper span { min-width: 26px; text-align: center; font-size: 0.78rem; font-weight: 500; }
+  .qty-stepper span { min-width: 28px; text-align: center; font-size: 0.8rem; font-weight: 500; }
 
   .order-summary { background: #f2efe9; padding: 0.3rem 1.1rem; margin-bottom: 1.5rem; }
   .order-line { display: flex; align-items: flex-start; justify-content: space-between; gap: 0.9rem; padding: 0.85rem 0; border-bottom: 1px solid rgba(10,10,10,0.08); }
@@ -730,6 +741,7 @@
   .modal.wide .modal-scroll { padding: 0; }
   .modal-cta-bar {
     flex-shrink: 0; padding: 1.1rem 2.2rem;
+    padding-bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
     border-top: 1px solid var(--gris-clair); background: var(--creme);
   }
   .modal-cta-bar:empty { display: none; }
@@ -826,7 +838,8 @@
   .chat-window {
     display: none; position: fixed; bottom: 5.6rem; right: 2rem; z-index: 151;
     width: 344px; background: white; box-shadow: 0 10px 50px rgba(0,0,0,0.2);
-    flex-direction: column; overflow: hidden; max-height: 480px;
+    flex-direction: column; overflow: hidden;
+    max-height: min(480px, calc(100dvh - 8rem));
   }
   .chat-window.open { display: flex; animation: modalIn 0.3s var(--ease); }
   .chat-head { background: var(--noir); color: white; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 0.8rem; }
@@ -895,7 +908,6 @@
      RESPONSIVE
   ═══════════════════════════════════════ */
   @media (max-width: 1024px) {
-    .avis-grid { grid-template-columns: 1fr 1fr; }
     .footer-inner { grid-template-columns: 1fr 1fr; }
     .atelier-inner { gap: 3rem; }
   }
@@ -924,8 +936,9 @@
     .hero-footer { left: 1.4rem; right: 1.4rem; bottom: 1.8rem; }
     .featured { padding: 3.8rem 1.2rem 2rem; }
     .atelier { padding: 4rem 1.2rem; }
-    .avis { padding: 4rem 1.2rem; }
-    .avis-grid { grid-template-columns: 1fr; }
+    .avis { padding: 4rem 0; }
+    .avis-head { padding: 0 1.4rem; }
+    .avis-arrow { display: none; }
     .wa-cta { padding: 3.5rem 1.4rem; }
     .catalogue-section { padding: 2.6rem 1.2rem 3.2rem; }
     .products-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
@@ -933,8 +946,15 @@
     .footer-inner { grid-template-columns: 1fr; gap: 2.2rem; }
     footer { padding: 3.5rem 1.5rem 2rem; }
     .back-top { bottom: 1.4rem; left: 1.4rem; width: 40px; height: 40px; }
-    .modal { padding: 1.8rem 1.4rem; }
+    .modal-scroll { padding: 1.8rem 1.4rem; }
+    .modal.wide .modal-scroll { padding: 0; }
     .qv-body { padding: 1.8rem 1.4rem; }
+    .modal-cta-bar { padding: 0.85rem 1.2rem; padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px)); }
+    /* iOS zoome sur les champs < 16px : on force 16px sur mobile */
+    .form-group input, .form-group select, .chat-input, .qv-color-input { font-size: 16px; }
+    .size-chip { min-width: 46px; padding: 0.7rem 0.6rem; font-size: 0.85rem; }
+    .filter-btn { padding: 0.6rem 1.1rem; }
+    .quick-btn { padding: 0.5rem 0.75rem; }
   }
 
   @media (max-width: 480px) {
@@ -1009,7 +1029,7 @@
     <p class="hero-sub">Claquettes, sandales & pochettes façonnées à la main. Chaque pièce LSA célèbre l'exigence artisanale et l'élégance au quotidien.</p>
     <div class="hero-btns">
       <a class="btn-primary" href="#packs">Découvrir les packs</a>
-      <a class="btn-outline" href="#" onclick="openChat();return false;">Parler à Chelsea</a>
+      <a class="btn-outline" href="#" onclick="openChat();return false;">Parler à Sofia</a>
     </div>
   </div>
 
@@ -1096,13 +1116,19 @@
   <div class="products-grid" id="grid-femme"></div>
 </section>
 
-<!-- ═══════════════ TÉMOIGNAGES ═══════════════ -->
+<!-- ═══════════════ TÉMOIGNAGES (captures WhatsApp réelles) ═══════════════ -->
 <section class="avis">
   <div class="avis-head reveal">
     <p class="section-eyebrow">Ils portent LSA</p>
     <h2 class="section-title">La parole à nos <em>clients</em></h2>
+    <p>Des retours authentiques, reçus sur WhatsApp après livraison.</p>
   </div>
-  <div class="avis-grid" id="avis-grid"></div>
+  <div class="avis-carousel" id="avis-carousel" aria-label="Avis clients — captures WhatsApp"></div>
+  <div class="avis-nav">
+    <button class="avis-arrow" onclick="avisScroll(-1)" aria-label="Avis précédent">←</button>
+    <span class="avis-hint">Faites défiler</span>
+    <button class="avis-arrow" onclick="avisScroll(1)" aria-label="Avis suivant">→</button>
+  </div>
 </section>
 
 <!-- ═══════════════ WHATSAPP CTA ═══════════════ -->
@@ -1165,12 +1191,12 @@
 </div>
 
 <!-- ═══════════════ CHAT ═══════════════ -->
-<button class="chat-fab" onclick="toggleChat()" id="chat-fab" title="Parler à Chelsea" aria-label="Ouvrir le chat">💬</button>
-<div class="chat-window" id="chat-window" role="dialog" aria-label="Chat Chelsea">
+<button class="chat-fab" onclick="toggleChat()" id="chat-fab" title="Parler à Sofia" aria-label="Ouvrir le chat">💬</button>
+<div class="chat-window" id="chat-window" role="dialog" aria-label="Chat Sofia">
   <div class="chat-head">
     <div class="chat-avatar">👩</div>
     <div>
-      <div class="chat-head-name">Chelsea — Conseillère LSA</div>
+      <div class="chat-head-name">Sofia — Conseillère LSA</div>
       <div class="chat-head-status">● En ligne · Répond en quelques secondes</div>
     </div>
   </div>
@@ -1249,13 +1275,8 @@ const packs = [
   { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg", tag:"Duo exclusif",    nom:"Ensemble H & C",      prix:24000, desc:"Claquettes H + croisée",                     tall:false, genre:"homme" },
 ];
 
-const temoignages = [
-  { txt: "Je viens de recevoir, c'est très joli, j'ai vraiment aimé ! Je veux le marron pour madame et moi.", nom: "Oluwafemi O." },
-  { txt: "J'ai bien reçu le colis. Et franchement, c'est top : la matière, le design, j'ai adoré.", nom: "Hermann Billy" },
-  { txt: "J'ai reçu la commande. Pointure respectée. Parfait. J'aime et je valide.", nom: "Codjo T." },
-  { txt: "J'ai reçu la commande et j'apprécie la qualité.", nom: "Eric Djossou" },
-  { txt: "Juste vous informer que j'ai reçu mon colis, merci. La pointure c'est top.", nom: "Naf" },
-];
+// Captures WhatsApp réelles (dossier public/image Avis clients/)
+const avisImages = [1, 2, 3, 4, 5, 6, 7].map(n => `image Avis clients/avis client ${n}.jpg`);
 
 const annonces = [
   "Fait main à Cotonou · Livraison Afrique & International",
@@ -1399,18 +1420,17 @@ function renderPacks() {
 // TÉMOIGNAGES
 // ══════════════════════════════════════════
 function renderAvis() {
-  document.getElementById('avis-grid').innerHTML = temoignages.map((t, i) => `
-    <div class="avis-card reveal d${(i%3)+1}">
-      <div class="avis-stars">★ ★ ★ ★ ★</div>
-      <p class="avis-txt">« ${t.txt} »</p>
-      <div class="avis-auteur">
-        <div class="avis-avatar">${t.nom.charAt(0)}</div>
-        <div>
-          <div class="avis-nom">${t.nom}</div>
-          <div class="avis-ville">Client LSA · Commande confirmée</div>
-        </div>
-      </div>
-    </div>`).join('');
+  document.getElementById('avis-carousel').innerHTML = avisImages.map((src, i) => `
+    <figure class="avis-shot">
+      <img src="${imgUrl(src)}" alt="Avis client LSA ${i+1} — capture WhatsApp" loading="lazy" decoding="async">
+    </figure>`).join('');
+}
+
+function avisScroll(dir) {
+  const c = document.getElementById('avis-carousel');
+  const card = c.querySelector('.avis-shot');
+  const step = card ? card.getBoundingClientRect().width + 18 : 400;
+  c.scrollBy({ left: dir * step, behavior: 'smooth' });
 }
 
 // ══════════════════════════════════════════
@@ -1608,7 +1628,7 @@ function renderQvArticleStep() {
           <span>${qvQty}</span>
           <button onclick="qvSetQty(1)" aria-label="Augmenter">+</button>
         </div>
-        <p class="qv-note"><b>Fait main à Cotonou.</b> Pointure incertaine ? Chelsea vous conseille sur WhatsApp avant expédition.</p>
+        <p class="qv-note"><b>Fait main à Cotonou.</b> Pointure incertaine ? Sofia vous conseille sur WhatsApp avant expédition.</p>
       </div>
     </div>`;
   document.getElementById('qv-cta-bar').innerHTML = `
@@ -1765,12 +1785,12 @@ function newsletterSubmit(e) {
 }
 
 // ══════════════════════════════════════════
-// CHAT CHELSEA
+// CHAT SOFIA
 // ══════════════════════════════════════════
 function toggleChat() { document.getElementById('chat-window').classList.toggle('open'); }
 function openChat()   { document.getElementById('chat-window').classList.add('open'); }
 
-function chelseaReply(msg) {
+function sofiaReply(msg) {
   const t = msg.toLowerCase();
   const has = (...k) => k.some(x => t.includes(x));
   if (has('livr','délai','delai','expédi','envoi'))       return "Nous livrons en 3 à 7 jours ouvrés au Bénin et en Afrique de l'Ouest 🚚, et 10 à 15 jours à l'international. Vous recevez un lien de suivi par WhatsApp dès l'expédition.";
@@ -1782,7 +1802,7 @@ function chelseaReply(msg) {
   if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales vont de 9 000 à 24 000 FCFA. Les ensembles (chaussures + pochette) sont entre 17 500 et 24 000 FCFA 😊";
   if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
   if (has('pochette','sac','clutch'))                      return "Nos pochettes avec dragonne accompagnent parfaitement nos sandales 👝. Retrouvez-les dans l'onglet « Pochettes » du catalogue.";
-  if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Chelsea, votre conseillère. Comment puis-je vous aider ?";
+  if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Sofia, votre conseillère. Comment puis-je vous aider ?";
   if (has('merci','super','parfait','génial','genial'))    return "Avec grand plaisir 🤍 N'hésitez pas pour toute question. Bel shopping chez LSA !";
   if (has('contact','whatsapp','téléphone','telephone','instagram','facebook','tiktok','réseau'))
     return "Joignez-nous sur WhatsApp au +229 0196685554 📱, ou suivez-nous sur Facebook, TikTok et Instagram : Luxury - LSA.";
@@ -1814,7 +1834,7 @@ function sendMessage() {
   addMsg(text, 'user');
   document.getElementById('quick-replies').style.display = 'none';
   showTyping();
-  const reply = chelseaReply(text);
+  const reply = sofiaReply(text);
   setTimeout(() => { hideTyping(); addMsg(reply, 'bot'); }, 700 + Math.random()*500);
 }
 function sendQuick(text) { document.getElementById('chat-input').value=text; sendMessage(); }
@@ -1878,10 +1898,10 @@ document.addEventListener('keydown', e => {
   if (e.key==='Escape') { closeMobileNav(); closeQuick(); }
 });
 
-// Message d'accueil Chelsea
+// Message d'accueil Sofia
 setTimeout(() => {
   if (!document.getElementById('chat-messages').children.length)
-    addMsg("Bonjour et bienvenue chez LSA ✨ Je suis Chelsea, votre conseillère personnelle. Comment puis-je vous aider aujourd'hui ?", 'bot');
+    addMsg("Bonjour et bienvenue chez LSA ✨ Je suis Sofia, votre conseillère personnelle. Comment puis-je vous aider aujourd'hui ?", 'bot');
 }, 600);
 </script>
 </body>
