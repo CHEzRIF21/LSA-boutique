@@ -1227,6 +1227,8 @@ const produits = {
     { id:8,  nom:"Croiser Noir 2",                  sous:"Claquette croisée grise",        prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.12 (1).jpeg" },
     { id:9,  nom:"Ensemble H & C",                  sous:"Duo claquettes H + croisée",         prix:24000, badge:"new", cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg" },
     { id:10, nom:"Croiser CIV",                     sous:"Claquette croisée CIV",              prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11.jpeg" },
+    { id:17, nom:"Croisé Damier Marron",            sous:"Sandale croisée motif damier",       prix:19900, badge:"new", cat:"chaussures", photo:"images/Damier maron.jpg" },
+    { id:18, nom:"H Blanc Chocolat",                sous:"Claquette bicolore blanc & chocolat", prix:19900, badge:"new", cat:"chaussures", photo:"images/H Blanc chocolat.jpg" },
   ],
   femme: [
     { id:11, nom:"Ensemble LV Blanche",             sous:"Duo claquettes blanc & sable",       prix:19900, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg" },
@@ -1235,6 +1237,7 @@ const produits = {
     { id:14, nom:"LV Bleue",                        sous:"Claquette premium",             prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11 (4).jpeg" },
     { id:15, nom:"Ensemble NC",                     sous:"Duo claquettes ton naturel",        prix:19900, cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.13 (1).jpeg" },
     { id:16, nom:"Ensemble NC · Pack",              sous:"Duo claquettes + pochette assortie",     prix:17500, ancien:19900, badge:"solde", cat:"sacs", photo:"images/WhatsApp Image 2026-06-15 at 15.49.29.jpeg" },
+    { id:19, nom:"Damier Boucle",                   sous:"Mule damier avec boucle métallique", prix:9000, badge:"new", cat:"chaussures", photo:"images/Damien Femme.jpg" },
   ]
 };
 
@@ -1776,7 +1779,7 @@ function chelseaReply(msg) {
   if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre numéro de commande (format LSA-XXXXX) et je vous donne l'état de votre colis en temps réel.";
   if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
     return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
-  if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales vont de 11 000 à 24 000 FCFA. Les ensembles (chaussures + pochette) sont entre 17 500 et 24 000 FCFA 😊";
+  if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales vont de 9 000 à 24 000 FCFA. Les ensembles (chaussures + pochette) sont entre 17 500 et 24 000 FCFA 😊";
   if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
   if (has('pochette','sac','clutch'))                      return "Nos pochettes avec dragonne accompagnent parfaitement nos sandales 👝. Retrouvez-les dans l'onglet « Pochettes » du catalogue.";
   if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Chelsea, votre conseillère. Comment puis-je vous aider ?";
