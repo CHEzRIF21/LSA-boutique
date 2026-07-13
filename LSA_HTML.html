@@ -12,6 +12,23 @@
 <meta property="og:image" content="https://lsa-boutique.vercel.app/public/hero%20Image/WhatsApp%20Image%202026-06-15%20at%2015.49.33.jpeg">
 <meta property="og:locale" content="fr_FR">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230a0a0a'/%3E%3Ctext x='50' y='50' dy='.35em' text-anchor='middle' font-family='Georgia,serif' font-size='52' fill='%23b8975a'%3EL%3C/text%3E%3C/svg%3E">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '929739565159117');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -816,21 +833,21 @@
   .qv-price { font-size: 1.25rem; font-weight: 600; color: var(--or); }
   .qv-old { font-size: 0.85rem; color: var(--gris); text-decoration: line-through; }
   .qv-label { font-size: 0.62rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gris); margin-bottom: 0.6rem; }
-  .qv-sizes { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.4rem; }
-  .size-chip {
-    min-width: 40px; padding: 0.5rem 0.6rem; text-align: center;
-    border: 1px solid var(--gris-clair); background: white; cursor: pointer;
-    font-size: 0.78rem; font-family: 'Inter', sans-serif; color: var(--texte);
-    transition: all 0.18s;
-  }
-  .size-chip:hover { border-color: var(--or); color: var(--or); }
-  .size-chip.selected { background: var(--noir); color: var(--creme); border-color: var(--noir); }
   .qv-color-input {
     width: 100%; padding: 0.65rem 0.85rem; border: 1px solid var(--gris-clair);
     background: white; font-size: 0.85rem; font-family: 'Inter', sans-serif;
     color: var(--texte); outline: none; margin-bottom: 1.4rem; transition: border-color 0.2s;
   }
   .qv-color-input:focus { border-color: var(--or); }
+  .qv-size-input {
+    width: 100%; max-width: 160px; padding: 0.65rem 0.85rem; border: 1px solid var(--gris-clair);
+    background: white; font-size: 0.9rem; font-family: 'Inter', sans-serif;
+    color: var(--texte); outline: none; transition: border-color 0.2s;
+  }
+  .qv-size-input:focus { border-color: var(--or); }
+  .qv-size-input.error { border-color: #c0392b; }
+  .qv-size-error { display: none; font-size: 0.7rem; color: #c0392b; margin-top: 0.4rem; }
+  .qv-size-error.show { display: block; }
   .qv-qty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
   .qv-note { font-size: 0.68rem; color: var(--gris); line-height: 1.7; margin-top: auto; padding-top: 1.2rem; border-top: 1px solid var(--gris-clair); }
   .qv-note b { color: var(--or); font-weight: 500; }
@@ -962,8 +979,7 @@
     .qv-body { padding: 1.8rem 1.4rem; }
     .modal-cta-bar { padding: 0.85rem 1.2rem; padding-bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px)); }
     /* iOS zoome sur les champs < 16px : on force 16px sur mobile */
-    .form-group input, .form-group select, .chat-input, .qv-color-input { font-size: 16px; }
-    .size-chip { min-width: 46px; padding: 0.7rem 0.6rem; font-size: 0.85rem; }
+    .form-group input, .form-group select, .chat-input, .qv-color-input, .qv-size-input { font-size: 16px; }
     .filter-btn { padding: 0.6rem 1.1rem; }
     .quick-btn { padding: 0.5rem 0.75rem; }
   }
@@ -1029,7 +1045,7 @@
   <div class="hero-grid"></div>
 
   <div class="hero-stats" aria-hidden="true">
-    <div class="stat"><div class="stat-n">34+</div><div class="stat-l">Modèles exclusifs</div></div>
+    <div class="stat"><div class="stat-n">35+</div><div class="stat-l">Modèles exclusifs</div></div>
     <div class="stat"><div class="stat-n">15+</div><div class="stat-l">Pays livrés</div></div>
     <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Clients satisfaits</div></div>
   </div>
@@ -1151,7 +1167,7 @@
     <p class="section-eyebrow">Commande directe</p>
     <h2 class="section-title">Une question ? Une commande ?<br><em>Écrivez-nous.</em></h2>
     <p>Notre équipe vous répond sur WhatsApp en quelques minutes — conseils de pointure, disponibilité, livraison, tout y passe.</p>
-    <a class="wa-btn" href="https://wa.me/2290196685554?text=Bonjour%20LSA%20%F0%9F%91%8B%20Je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener">
+    <a class="wa-btn" href="https://wa.me/2290196685554?text=Bonjour%20LSA%20%F0%9F%91%8B%20Je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener" onclick="if(window.fbq)fbq('track','Contact')">
       <span>📱</span> Commander sur WhatsApp
     </a>
   </div>
@@ -1265,18 +1281,19 @@ const produits = {
     { id:4,  nom:"Croiser Noire Civ",       sous:"Sandale croisée noire",               prix:11000, cat:"chaussures", photo:"images/Collection Homme/Croiser noire Civ.jpg" },
     { id:5,  nom:"Croisier Noir",           sous:"Sandale croisée noire tressée",       prix:11000, cat:"chaussures", photo:"images/Collection Homme/Croisier Noir.jpeg" },
     { id:6,  nom:"Dune Prestige",           sous:"Claquette ton sable",                 prix:11000, cat:"chaussures", photo:"images/Collection Homme/Dune prestige.jpeg" },
-    { id:7,  nom:"Elegance Croisier",       sous:"Sandale croisée élégante",             prix:11000, cat:"chaussures", photo:"images/Collection Homme/Elegance Croisier.jpeg" },
+    { id:7,  nom:"Elegance Croisier",       sous:"Sandale croisée élégante",             prix:14000, cat:"chaussures", photo:"images/Collection Homme/Elegance Croisier.jpeg" },
     { id:8,  nom:"Elite Croco",             sous:"Claquette façon croco",               prix:11000, cat:"chaussures", photo:"images/Collection Homme/Elite Croco.jpeg" },
     { id:9,  nom:"H Kaki",                  sous:"Claquette kaki bande H",              prix:11000, cat:"chaussures", photo:"images/Collection Homme/H Kaki.jpeg" },
     { id:10, nom:"H Saïd",                  sous:"Claquette bande H",                   prix:11000, cat:"chaussures", photo:"images/Collection Homme/H Said.jpg" },
-    { id:11, nom:"H Velours",               sous:"Claquette bande velours",             prix:11000, cat:"chaussures", photo:"images/Collection Homme/H Velours.jpeg" },
+    { id:11, nom:"H Velours",               sous:"Claquette bande velours",             prix:14000, cat:"chaussures", photo:"images/Collection Homme/H Velours.jpeg" },
     { id:12, nom:"Ivoir Croisé",            sous:"Sandale croisée ivoire",              prix:11000, cat:"chaussures", photo:"images/Collection Homme/Ivoir croise.jpeg" },
     { id:13, nom:"LV Unique",               sous:"Claquette bicolore bleu",             prix:11000, cat:"chaussures", photo:"images/Collection Homme/LV Unique.jpeg" },
-    { id:14, nom:"Snake Noir",              sous:"Claquette façon snake noire",         prix:11000, cat:"chaussures", photo:"images/Collection Homme/Snake Noir.jpeg" },
-    { id:15, nom:"Tapettes Velours",        sous:"Claquette double bride velours",      prix:11000, cat:"chaussures", photo:"images/Collection Homme/Tapettes Velours.jpeg" },
+    { id:14, nom:"Perle Rose",              sous:"Claquette rose ornée de strass",      prix:14000, cat:"chaussures", photo:"images/Collection Homme/Perle rose.jpg" },
+    { id:15, nom:"Snake Noir",              sous:"Claquette façon snake noire",         prix:11000, cat:"chaussures", photo:"images/Collection Homme/Snake Noir.jpeg" },
+    { id:35, nom:"Tapettes Velours",        sous:"Claquette double bride velours",      prix:11000, cat:"chaussures", photo:"images/Collection Homme/Tapettes Velours.jpeg" },
     // — Ensembles (duo / duo + pochette) —
-    { id:16, nom:"Croisier Civ Kaki & Saccoche", sous:"Sandale croisée kaki + pochette assortie", prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/Croisier Civ kaki & Saccoche.jpeg" },
-    { id:17, nom:"Croisier Noir & Saccoche",     sous:"Sandale croisée noire + pochette assortie", prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/Croisier Noir & Saccoche.jpeg" },
+    { id:16, nom:"Croisier Civ Kaki & Saccoche", sous:"Sandale croisée kaki + pochette assortie", prix:15000, badge:"new", cat:"sacs", photo:"images/Ensemble/Croisier Civ kaki & Saccoche.jpeg" },
+    { id:17, nom:"Croisier Noir & Saccoche",     sous:"Sandale croisée noire + pochette assortie", prix:15000, badge:"new", cat:"sacs", photo:"images/Ensemble/Croisier Noir & Saccoche.jpeg" },
     { id:18, nom:"Croisé Damier Marron",         sous:"Sandale croisée motif damier",             prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Damier maron.jpg" },
     { id:19, nom:"Duo Elegance Croisier",        sous:"Duo sandales croisées élégantes",          prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Elegance Croisier.jpeg" },
     { id:20, nom:"Duo Elite Croco",              sous:"Duo claquettes façon croco",               prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Elite Croco.jpeg" },
@@ -1285,19 +1302,19 @@ const produits = {
     { id:23, nom:"Elite Croco & Saccoche",       sous:"Claquette façon croco + pochette assortie", prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/Elite Croco & Saccoche.jpeg" },
     { id:24, nom:"Ensemble Snake",               sous:"Duo claquettes façon snake",               prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Ensemble Snake.jpeg" },
     { id:25, nom:"H Blanc Chocolat",             sous:"Claquette bicolore blanc & chocolat",      prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/H Blanc chocolat.jpg" },
-    { id:26, nom:"H Saïd & Saccoche",            sous:"Claquette bande H + pochette assortie",    prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/H Said & Saccoche.jpg" },
+    { id:26, nom:"H Saïd & Saccoche",            sous:"Claquette bande H + pochette assortie",    prix:15000, badge:"new", cat:"sacs", photo:"images/Ensemble/H Said & Saccoche.jpg" },
     { id:27, nom:"Prestige Duo",                 sous:"Duo claquettes prestige",                  prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Prestige Duo.jpeg" },
   ],
   femme: [
     // — collection Femme (pièces solo) —
-    { id:28, nom:"Blanc Marron Femme",      sous:"Claquette bicolore blanc & marron",   prix:11000, cat:"chaussures", photo:"images/collection Femme/Blanc Marron Femme.jpeg" },
+    { id:28, nom:"Blanc Marron Femme",      sous:"Claquette bicolore blanc & marron",   prix:9000,  cat:"chaussures", photo:"images/collection Femme/Blanc Marron Femme.jpeg" },
     { id:29, nom:"Damier Boucle",           sous:"Mule damier avec boucle métallique",  prix:9000,  badge:"new", cat:"chaussures", photo:"images/collection Femme/Damien Femme.jpg" },
-    { id:30, nom:"H Papillon Femme",        sous:"Claquette bande papillon",            prix:11000, cat:"chaussures", photo:"images/collection Femme/H Pipillon femme.jpeg" },
-    { id:31, nom:"H Saïd Femme",            sous:"Claquette bande H",                   prix:11000, cat:"chaussures", photo:"images/collection Femme/H Said Femme.jpeg" },
+    { id:30, nom:"H Papillon Femme",        sous:"Claquette bande papillon",            prix:9000,  cat:"chaussures", photo:"images/collection Femme/H Pipillon femme.jpeg" },
+    { id:31, nom:"H Saïd Femme",            sous:"Claquette bande H",                   prix:9000,  cat:"chaussures", photo:"images/collection Femme/H Said Femme.jpeg" },
     // — Ensembles (duo) —
     { id:32, nom:"Duo LV Blanc",            sous:"Duo claquettes blanc & sable",        prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo LV Blanc.jpeg" },
     { id:33, nom:"Duo LV Bleue",            sous:"Duo claquettes bleues",               prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo LV bleue.jpg" },
-    { id:34, nom:"Duo Perle Rose",          sous:"Duo claquettes ornées de strass",     prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Perle rose.jpg" },
+    { id:34, nom:"Duo Perle Rose",          sous:"Duo claquettes ornées de strass",     prix:24000, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Perle rose.jpg" },
   ]
 };
 
@@ -1314,8 +1331,6 @@ const annonces = [
   "Paiement à la livraison disponible au Bénin",
   "Commandez sur WhatsApp : +229 0196685554"
 ];
-
-const TAILLES = [37, 38, 39, 40, 41, 42, 43, 44, 45];
 
 // ══════════════════════════════════════════
 // REVEAL AU DÉFILEMENT (défini AVANT tout rendu)
@@ -1451,6 +1466,7 @@ function packScroll(dir) {
   const card = c.querySelector('.pack-card');
   const step = card ? card.getBoundingClientRect().width + 18 : 300;
   c.scrollBy({ left: dir * step, behavior: 'smooth' });
+  if (packAutoCtl) packAutoCtl.pauseThenResume();
 }
 
 // ══════════════════════════════════════════
@@ -1468,6 +1484,38 @@ function avisScroll(dir) {
   const card = c.querySelector('.avis-shot');
   const step = card ? card.getBoundingClientRect().width + 18 : 400;
   c.scrollBy({ left: dir * step, behavior: 'smooth' });
+  if (avisAutoCtl) avisAutoCtl.pauseThenResume();
+}
+
+// ══════════════════════════════════════════
+// DÉFILEMENT AUTOMATIQUE DES CARROUSELS
+// ══════════════════════════════════════════
+let avisAutoCtl = null, packAutoCtl = null;
+
+function initAutoCarousel(containerId, cardSelector) {
+  const c = document.getElementById(containerId);
+  if (!c) return null;
+  let timer = null, resumeTimeout = null;
+
+  const tick = () => {
+    const card = c.querySelector(cardSelector);
+    const step = card ? card.getBoundingClientRect().width + 18 : 300;
+    const atEnd = c.scrollLeft + c.clientWidth >= c.scrollWidth - 4;
+    c.scrollTo({ left: atEnd ? 0 : c.scrollLeft + step, behavior: 'smooth' });
+  };
+  const stop = () => { if (timer) clearInterval(timer); timer = null; };
+  const start = () => { stop(); timer = setInterval(tick, 2500); };
+  const pauseThenResume = () => {
+    stop();
+    clearTimeout(resumeTimeout);
+    resumeTimeout = setTimeout(start, 4000);
+  };
+
+  ['pointerdown', 'touchstart', 'wheel'].forEach(evt =>
+    c.addEventListener(evt, pauseThenResume, { passive: true })
+  );
+  start();
+  return { pauseThenResume };
 }
 
 // ══════════════════════════════════════════
@@ -1653,11 +1701,12 @@ function renderQvArticleStep() {
           <span class="qv-price">${formatPrix(p.prix)}</span>
           ${p.ancien ? `<span class="qv-old">${formatPrix(p.ancien)}</span>` : ''}
         </div>
-        <div class="qv-label">Pointure ${qvSize ? '· <b style="color:var(--or)">'+qvSize+'</b>' : '<span style="opacity:.6">(optionnelle)</span>'}</div>
-        <div class="qv-sizes">
-          ${TAILLES.map(t => `<button class="size-chip ${qvSize===t?'selected':''}" onclick="qvSelectSize(${t})">${t}</button>`).join('')}
-        </div>
-        <div class="qv-label">Couleur souhaitée <span style="opacity:.6">(optionnel, si plusieurs disponibles)</span></div>
+        <div class="qv-label">Pointure <span style="color:#c0392b">*</span></div>
+        <input class="qv-size-input" id="qv-size-input" type="number" inputmode="numeric" min="30" max="50" step="1"
+               placeholder="Ex : 42" value="${qvSize ?? ''}"
+               oninput="qvSize = this.value ? parseInt(this.value,10) : null; qvClearSizeError();">
+        <p class="qv-size-error" id="qv-size-error">Merci d'indiquer votre pointure pour continuer.</p>
+        <div class="qv-label" style="margin-top:1.2rem">Couleur souhaitée <span style="opacity:.6">(optionnel, si plusieurs disponibles)</span></div>
         <input class="qv-color-input" id="qv-color-input" type="text" placeholder="Ex : noir, kaki, sable…" value="${qvColor.replace(/"/g,'&quot;')}" oninput="qvColor=this.value">
         <div class="qv-label">Quantité</div>
         <div class="qty-stepper">
@@ -1671,10 +1720,23 @@ function renderQvArticleStep() {
   document.getElementById('qv-cta-bar').innerHTML = `
     <button class="btn-primary qv-sticky-btn" onclick="qvContinue()">Continuer · ${formatPrix(p.prix * qvQty)} →</button>`;
 }
-function qvSelectSize(t) { qvSize = (qvSize===t ? null : t); renderQvArticleStep(); }
 function qvSetQty(d) { qvQty = Math.max(1, Math.min(9, qvQty + d)); renderQvArticleStep(); }
 
+function qvClearSizeError() {
+  const input = document.getElementById('qv-size-input');
+  const err = document.getElementById('qv-size-error');
+  if (input) input.classList.remove('error');
+  if (err) err.classList.remove('show');
+}
+
 function qvContinue() {
+  if (!qvSize) {
+    const input = document.getElementById('qv-size-input');
+    const err = document.getElementById('qv-size-error');
+    if (input) { input.classList.add('error'); input.focus(); }
+    if (err) err.classList.add('show');
+    return;
+  }
   qvPendingKey = addToCart(qvId, qvSize, null, qvQty, qvColor.trim());
   qvFlowStep = 'coordonnees';
   renderQvModal();
@@ -1785,6 +1847,7 @@ function submitOrderForm(e) {
 
   const message = buildOrderMessage(nom, ville, tel);
   qvLastOrderUrl = `https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(message)}`;
+  if (window.fbq) fbq('track', 'Lead', { value: cartTotal(), currency: 'XOF' });
   window.open(qvLastOrderUrl, '_blank', 'noopener');
   panier = []; updateCartBadge(); qvPendingKey = null;
   qvFlowStep = 'success';
@@ -1836,7 +1899,7 @@ function sofiaReply(msg) {
   if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre numéro de commande (format LSA-XXXXX) et je vous donne l'état de votre colis en temps réel.";
   if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
     return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
-  if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales solo sont à 9 000 ou 11 000 FCFA. Les ensembles (duo, parfois + pochette) sont entre 17 500 et 19 900 FCFA 😊";
+  if (has('prix','coût','cout','combien','tarif'))         return "Nos pièces solo sont à 9 000 FCFA (femme) ou 11 000 FCFA (homme). Les ensembles duo + pochette sont à 15 000 FCFA, et les duos complets entre 19 900 et 24 000 FCFA selon le modèle 😊";
   if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
   if (has('pochette','sac','clutch'))                      return "Certains de nos ensembles duo incluent une pochette assortie 👝. Retrouvez-les dans l'onglet « Ensembles » du catalogue.";
   if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Sofia, votre conseillère. Comment puis-je vous aider ?";
@@ -1908,6 +1971,8 @@ renderGrid('homme');
 renderGrid('femme');
 initFilters();
 observeReveals();
+packAutoCtl = initAutoCarousel('pack-grid', '.pack-card');
+avisAutoCtl = initAutoCarousel('avis-carousel', '.avis-shot');
 
 // Image atelier (lazy via data-src)
 (function(){
