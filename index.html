@@ -848,6 +848,10 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
   .qv-size-input.error { border-color: #c0392b; }
   .qv-size-error { display: none; font-size: 0.7rem; color: #c0392b; margin-top: 0.4rem; }
   .qv-size-error.show { display: block; }
+  .qv-size-double { display: flex; gap: 0.8rem; max-width: 340px; }
+  .qv-size-double > div { flex: 1; }
+  .qv-size-double .qv-size-input { max-width: none; }
+  .qv-size-sublabel { display: block; font-size: 0.68rem; color: var(--gris); margin-bottom: 0.3rem; }
   .qv-qty-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.6rem; }
   .qv-note { font-size: 0.68rem; color: var(--gris); line-height: 1.7; margin-top: auto; padding-top: 1.2rem; border-top: 1px solid var(--gris-clair); }
   .qv-note b { color: var(--or); font-weight: 500; }
@@ -1096,7 +1100,7 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
 <section class="atelier" id="atelier">
   <div class="atelier-inner">
     <div class="atelier-img reveal">
-      <img src="" data-src="image pack/WhatsApp Image 2026-06-15 at 15.49.32.jpeg" alt="Atelier LSA — ensemble claquettes et pochette assortie" loading="lazy" id="atelier-photo">
+      <img src="" data-src="images/Ensemble/Duo Elite Croco.jpeg" alt="Duo Elite Croco — savoir-faire artisanal LSA" loading="lazy" id="atelier-photo">
     </div>
     <div class="atelier-txt reveal d1">
       <p class="section-eyebrow">Notre savoir-faire</p>
@@ -1632,7 +1636,7 @@ function cartTotal() {
 // Une seule fenêtre, deux étapes guidées, jamais de détour par un panier séparé.
 // ══════════════════════════════════════════
 const BOUTIQUE_WHATSAPP = '2290196685554';
-let qvSize = null, qvQty = 1, qvId = null, qvColor = '';
+let qvSize = null, qvSizeH = null, qvSizeF = null, qvQty = 1, qvId = null, qvColor = '';
 let qvFlowStep = 'article';   // 'article' | 'coordonnees' | 'success'
 let qvPendingKey = null;      // clé de l'article ajouté pendant cette session du tunnel (permet le retour arrière)
 let qvLastOrderUrl = null;
@@ -1640,7 +1644,7 @@ let qvLastOrderUrl = null;
 function openQuick(id) {
   const p = findProduit(id);
   if (!p) return;
-  qvId = id; qvSize = null; qvQty = 1; qvColor = ''; qvFlowStep = 'article'; qvPendingKey = null;
+  qvId = id; qvSize = null; qvSizeH = null; qvSizeF = null; qvQty = 1; qvColor = ''; qvFlowStep = 'article'; qvPendingKey = null;
   document.getElementById('qv-modal').classList.add('open');
   renderQvModal();
 }
@@ -1687,8 +1691,33 @@ function wizardHead(step, backButton) {
     </div>`;
 }
 
+function needsDoubleSize(p) { return p.prix === 19900; }
+
 function renderQvArticleStep() {
   const p = findProduit(qvId);
+  const isDouble = needsDoubleSize(p);
+  const sizeFieldsHtml = isDouble ? `
+        <div class="qv-label">Pointures <span style="color:#c0392b">*</span> <span style="opacity:.6">(une pour lui, une pour elle)</span></div>
+        <div class="qv-size-double">
+          <div>
+            <label class="qv-size-sublabel" for="qv-size-input-h">Homme</label>
+            <input class="qv-size-input" id="qv-size-input-h" type="number" inputmode="numeric" min="30" max="50" step="1"
+                   placeholder="Ex : 43" value="${qvSizeH ?? ''}"
+                   oninput="qvSizeH = this.value ? parseInt(this.value,10) : null; qvClearSizeError();">
+          </div>
+          <div>
+            <label class="qv-size-sublabel" for="qv-size-input-f">Femme</label>
+            <input class="qv-size-input" id="qv-size-input-f" type="number" inputmode="numeric" min="30" max="50" step="1"
+                   placeholder="Ex : 38" value="${qvSizeF ?? ''}"
+                   oninput="qvSizeF = this.value ? parseInt(this.value,10) : null; qvClearSizeError();">
+          </div>
+        </div>
+        <p class="qv-size-error" id="qv-size-error">Merci d'indiquer les deux pointures (homme et femme) pour continuer.</p>` : `
+        <div class="qv-label">Pointure <span style="color:#c0392b">*</span></div>
+        <input class="qv-size-input" id="qv-size-input" type="number" inputmode="numeric" min="30" max="50" step="1"
+               placeholder="Ex : 42" value="${qvSize ?? ''}"
+               oninput="qvSize = this.value ? parseInt(this.value,10) : null; qvClearSizeError();">
+        <p class="qv-size-error" id="qv-size-error">Merci d'indiquer votre pointure pour continuer.</p>`;
   document.getElementById('qv-content').innerHTML = `
     <div class="qv-grid">
       <div class="qv-img"><img src="${imgUrl(p.photo)}" alt="${p.nom}"></div>
@@ -1701,11 +1730,7 @@ function renderQvArticleStep() {
           <span class="qv-price">${formatPrix(p.prix)}</span>
           ${p.ancien ? `<span class="qv-old">${formatPrix(p.ancien)}</span>` : ''}
         </div>
-        <div class="qv-label">Pointure <span style="color:#c0392b">*</span></div>
-        <input class="qv-size-input" id="qv-size-input" type="number" inputmode="numeric" min="30" max="50" step="1"
-               placeholder="Ex : 42" value="${qvSize ?? ''}"
-               oninput="qvSize = this.value ? parseInt(this.value,10) : null; qvClearSizeError();">
-        <p class="qv-size-error" id="qv-size-error">Merci d'indiquer votre pointure pour continuer.</p>
+        ${sizeFieldsHtml}
         <div class="qv-label" style="margin-top:1.2rem">Couleur souhaitée <span style="opacity:.6">(optionnel, si plusieurs disponibles)</span></div>
         <input class="qv-color-input" id="qv-color-input" type="text" placeholder="Ex : noir, kaki, sable…" value="${qvColor.replace(/"/g,'&quot;')}" oninput="qvColor=this.value">
         <div class="qv-label">Quantité</div>
@@ -1723,21 +1748,33 @@ function renderQvArticleStep() {
 function qvSetQty(d) { qvQty = Math.max(1, Math.min(9, qvQty + d)); renderQvArticleStep(); }
 
 function qvClearSizeError() {
-  const input = document.getElementById('qv-size-input');
+  ['qv-size-input', 'qv-size-input-h', 'qv-size-input-f'].forEach(id => {
+    const input = document.getElementById(id);
+    if (input) input.classList.remove('error');
+  });
   const err = document.getElementById('qv-size-error');
-  if (input) input.classList.remove('error');
   if (err) err.classList.remove('show');
 }
 
 function qvContinue() {
-  if (!qvSize) {
-    const input = document.getElementById('qv-size-input');
+  const p = findProduit(qvId);
+  const isDouble = needsDoubleSize(p);
+  const missing = isDouble ? (!qvSizeH || !qvSizeF) : !qvSize;
+  if (missing) {
+    const ids = isDouble ? ['qv-size-input-h', 'qv-size-input-f'] : ['qv-size-input'];
     const err = document.getElementById('qv-size-error');
-    if (input) { input.classList.add('error'); input.focus(); }
+    let firstInvalid = null;
+    ids.forEach((id, i) => {
+      const input = document.getElementById(id);
+      const empty = isDouble ? (i === 0 ? !qvSizeH : !qvSizeF) : !qvSize;
+      if (input && empty) { input.classList.add('error'); if (!firstInvalid) firstInvalid = input; }
+    });
+    if (firstInvalid) firstInvalid.focus();
     if (err) err.classList.add('show');
     return;
   }
-  qvPendingKey = addToCart(qvId, qvSize, null, qvQty, qvColor.trim());
+  const taille = isDouble ? `Homme ${qvSizeH} / Femme ${qvSizeF}` : qvSize;
+  qvPendingKey = addToCart(qvId, taille, null, qvQty, qvColor.trim());
   qvFlowStep = 'coordonnees';
   renderQvModal();
 }
