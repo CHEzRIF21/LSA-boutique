@@ -363,23 +363,26 @@
   /* ═══════════════════════════════════════
      PACKS EN VEDETTE
   ═══════════════════════════════════════ */
-  .featured { padding: 5.5rem 3rem 3rem; }
-  .featured-head { text-align: center; max-width: 620px; margin: 0 auto 3.2rem; }
+  .featured { padding: 4.5rem 0 3rem; }
+  .featured-head { text-align: center; max-width: 620px; margin: 0 auto 2.2rem; padding: 0 1.4rem; }
   .featured-head p { margin-top: 1rem; font-size: 0.85rem; color: var(--gris); line-height: 1.9; }
 
+  /* Carrousel tactile mobile-first — même langage visuel que le carrousel d'avis */
   .pack-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: auto auto;
-    gap: 1.2rem; max-width: 1280px; margin: 0 auto;
+    display: flex; gap: 1.1rem;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    padding: 0.4rem 1.4rem 1.4rem;
+    scrollbar-width: none;
   }
+  .pack-grid::-webkit-scrollbar { display: none; }
   .pack-card {
     position: relative; overflow: hidden; cursor: pointer;
-    aspect-ratio: 4/5; background: var(--gris-clair);
-    transition: box-shadow 0.35s;
+    flex: 0 0 min(280px, 74vw); scroll-snap-align: start;
+    aspect-ratio: 4/5; background: var(--gris-clair); border-radius: 10px;
+    transition: box-shadow 0.35s, transform 0.3s var(--ease);
   }
-  .pack-card.tall { grid-row: span 2; aspect-ratio: auto; }
-  .pack-card:hover { box-shadow: var(--shadow-hover); }
+  .pack-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-3px); }
   .pack-card img {
     width: 100%; height: 100%; object-fit: cover;
     transition: transform 0.8s var(--ease);
@@ -387,25 +390,35 @@
   .pack-card:hover img { transform: scale(1.06); }
   .pack-overlay {
     position: absolute; inset: 0;
-    background: linear-gradient(to top, rgba(6,5,3,0.88) 0%, rgba(6,5,3,0.15) 46%, transparent 70%);
+    background: linear-gradient(to top, rgba(6,5,3,0.9) 0%, rgba(6,5,3,0.2) 48%, transparent 72%);
     display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 1.7rem; color: var(--creme);
+    padding: 1.3rem; color: var(--creme);
   }
   .pack-tag {
     align-self: flex-start;
-    font-size: 0.55rem; letter-spacing: 0.26em; text-transform: uppercase;
-    color: var(--or-pale); margin-bottom: 0.55rem;
-    border: 1px solid rgba(232,217,181,0.35); padding: 0.28rem 0.7rem;
+    font-size: 0.53rem; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--or-pale); margin-bottom: 0.5rem;
+    border: 1px solid rgba(232,217,181,0.35); padding: 0.24rem 0.6rem;
   }
-  .pack-name { font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; font-weight: 400; line-height: 1.1; margin-bottom: 0.3rem; }
-  .pack-desc { font-size: 0.73rem; color: rgba(248,244,239,0.68); }
-  .pack-price { font-size: 0.84rem; color: var(--or-pale); margin-top: 0.55rem; letter-spacing: 0.06em; }
-  .pack-cta {
-    margin-top: 0.9rem; font-size: 0.63rem; letter-spacing: 0.22em; text-transform: uppercase;
-    color: var(--or-pale); opacity: 0; transform: translateY(8px);
-    transition: opacity 0.32s, transform 0.32s;
+  .pack-name { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 400; line-height: 1.1; margin-bottom: 0.25rem; }
+  .pack-desc { font-size: 0.68rem; color: rgba(248,244,239,0.68); }
+  .pack-price { font-size: 0.8rem; color: var(--or-pale); margin-top: 0.5rem; letter-spacing: 0.06em; }
+  .pack-nav {
+    display: flex; justify-content: center; align-items: center; gap: 0.8rem;
+    margin-top: 0.2rem;
   }
-  .pack-card:hover .pack-cta { opacity: 1; transform: translateY(0); }
+  .pack-arrow {
+    background: var(--creme); border: 1px solid var(--gris-clair);
+    color: var(--noir); width: 44px; height: 44px; border-radius: 50%;
+    cursor: pointer; font-size: 0.95rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .pack-arrow:hover { background: var(--noir); color: var(--creme); border-color: var(--noir); }
+  .pack-hint {
+    font-size: 0.62rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gris);
+  }
 
   /* ═══════════════════════════════════════
      ATELIER / SAVOIR-FAIRE
@@ -913,8 +926,6 @@
   }
 
   @media (max-width: 900px) {
-    .pack-grid { grid-template-columns: 1fr 1fr; gap: 0.9rem; }
-    .pack-card.tall { grid-row: span 1; aspect-ratio: 4/5; }
     .atelier-inner { grid-template-columns: 1fr; }
     .atelier::before { font-size: 13rem; right: -3rem; }
     .qv-grid { grid-template-columns: 1fr; }
@@ -958,7 +969,7 @@
   }
 
   @media (max-width: 480px) {
-    .pack-grid { grid-template-columns: 1fr; }
+    .pack-arrow { display: none; }
     .products-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
     .product-info { padding: 0.75rem 0.65rem; }
     .product-name { font-size: 0.96rem; }
@@ -987,7 +998,7 @@
       <a href="#atelier">L'Atelier</a>
       <a href="#catalogue" onclick="showSection('homme')">Homme</a>
       <a href="#catalogue" onclick="showSection('femme')">Femme</a>
-      <a href="#catalogue" onclick="filterCat('homme','sacs')">Pochettes</a>
+      <a href="#catalogue" onclick="filterCat('homme','sacs')">Ensembles</a>
     </div>
     <div class="nav-actions">
       <button onclick="openChat()" title="Service client" aria-label="Chat conseillère">💬</button>
@@ -1007,7 +1018,7 @@
   <a href="#atelier" onclick="closeMobileNav()">L'Atelier</a>
   <a href="#catalogue" onclick="showSection('homme');closeMobileNav()">Homme</a>
   <a href="#catalogue" onclick="showSection('femme');closeMobileNav()">Femme</a>
-  <a href="#catalogue" onclick="filterCat('homme','sacs');closeMobileNav()">Pochettes</a>
+  <a href="#catalogue" onclick="filterCat('homme','sacs');closeMobileNav()">Ensembles</a>
   <a href="https://wa.me/2290196685554" target="_blank" rel="noopener" class="mn-contact">WhatsApp · +229 0196685554</a>
 </div>
 
@@ -1018,7 +1029,7 @@
   <div class="hero-grid"></div>
 
   <div class="hero-stats" aria-hidden="true">
-    <div class="stat"><div class="stat-n">16+</div><div class="stat-l">Modèles exclusifs</div></div>
+    <div class="stat"><div class="stat-n">34+</div><div class="stat-l">Modèles exclusifs</div></div>
     <div class="stat"><div class="stat-n">15+</div><div class="stat-l">Pays livrés</div></div>
     <div class="stat"><div class="stat-n">98%</div><div class="stat-l">Clients satisfaits</div></div>
   </div>
@@ -1052,10 +1063,15 @@
 <section class="featured" id="packs">
   <div class="featured-head reveal">
     <p class="section-eyebrow">Les pièces signature</p>
-    <h2 class="section-title">Nos packs les plus <em>convoités</em></h2>
-    <p>Une sélection éditoriale de nos modèles phares — claquettes, mules et pochettes assorties, photographiées dans nos ateliers.</p>
+    <h2 class="section-title">Nos ensembles les plus <em>convoités</em></h2>
+    <p>Duos claquettes + pochette assortie — nos pièces les plus demandées, à commander directement.</p>
   </div>
   <div class="pack-grid" id="pack-grid"></div>
+  <div class="pack-nav">
+    <button class="pack-arrow" onclick="packScroll(-1)" aria-label="Ensemble précédent">←</button>
+    <span class="pack-hint">Faites défiler</span>
+    <button class="pack-arrow" onclick="packScroll(1)" aria-label="Ensemble suivant">→</button>
+  </div>
 </section>
 
 <div class="gold-line"></div>
@@ -1093,10 +1109,9 @@
   </div>
   <div class="filters" data-genre="homme">
     <button class="filter-btn active" data-cat="all">Tout</button>
-    <button class="filter-btn" data-cat="chaussures">Claquettes & Sandales</button>
-    <button class="filter-btn" data-cat="sacs">Pochettes</button>
+    <button class="filter-btn" data-cat="chaussures">Pièces solo</button>
+    <button class="filter-btn" data-cat="sacs">Ensembles</button>
     <button class="filter-btn" data-cat="new">Nouveautés</button>
-    <button class="filter-btn" data-cat="solde">Soldes</button>
   </div>
   <div class="products-grid" id="grid-homme"></div>
 </section>
@@ -1108,10 +1123,9 @@
   </div>
   <div class="filters" data-genre="femme">
     <button class="filter-btn active" data-cat="all">Tout</button>
-    <button class="filter-btn" data-cat="chaussures">Mules & Sandales</button>
-    <button class="filter-btn" data-cat="sacs">Pochettes</button>
+    <button class="filter-btn" data-cat="chaussures">Pièces solo</button>
+    <button class="filter-btn" data-cat="sacs">Ensembles</button>
     <button class="filter-btn" data-cat="new">Nouveautés</button>
-    <button class="filter-btn" data-cat="solde">Soldes</button>
   </div>
   <div class="products-grid" id="grid-femme"></div>
 </section>
@@ -1159,7 +1173,7 @@
       <h4>Collections</h4>
       <a href="#catalogue" onclick="showSection('homme')">Homme</a>
       <a href="#catalogue" onclick="showSection('femme')">Femme</a>
-      <a href="#catalogue" onclick="filterCat('homme','sacs')">Pochettes</a>
+      <a href="#catalogue" onclick="filterCat('homme','sacs')">Ensembles</a>
       <a href="#packs">Packs signature</a>
     </div>
     <div class="footer-col">
@@ -1241,39 +1255,56 @@ const marqueeItems = [
   '<b>Paiement à la livraison</b>', '<b>Retours sous 14 jours</b>', '<b>Mobile Money accepté</b>'
 ];
 
+// Catalogue reconstruit depuis l'arborescence public/images/{Collection Homme, collection Femme, Ensemble}
 const produits = {
   homme: [
-    { id:1,  nom:"Croisé Noir 01",                 sous:"Sandale noire tressée",           prix:11000, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (1).jpeg" },
-    { id:2,  nom:"Ensemble Snake",                  sous:"Duo claquettes façon snake",         prix:19900, badge:"new", cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.09.jpeg" },
-    { id:3,  nom:"Ensemble CIV · Chaussures + Sac", sous:"Claquettes + pochette assortie",     prix:17500, cat:"sacs",  photo:"images/WhatsApp Image 2026-06-15 at 15.48.11 (2).jpeg" },
-    { id:4,  nom:"H Kaki",                          sous:"Claquette kaki",                prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.33 (2).jpeg" },
-    { id:5,  nom:"Ensemble H",                      sous:"Duo claquettes grainées",            prix:19900, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg" },
-    { id:6,  nom:"Noire Tapettes",                  sous:"Claquette double bride noire",       prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.13 (2).jpeg" },
-    { id:7,  nom:"Croiser Noir + Sac",              sous:"Claquette croisée + pochette noire", prix:17500, cat:"sacs",  photo:"images/WhatsApp Image 2026-06-15 at 15.49.33.jpeg" },
-    { id:8,  nom:"Croiser Noir 2",                  sous:"Claquette croisée grise",        prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.12 (1).jpeg" },
-    { id:9,  nom:"Ensemble H & C",                  sous:"Duo claquettes H + croisée",         prix:24000, badge:"new", cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg" },
-    { id:10, nom:"Croiser CIV",                     sous:"Claquette croisée CIV",              prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11.jpeg" },
-    { id:17, nom:"Croisé Damier Marron",            sous:"Sandale croisée motif damier",       prix:19900, badge:"new", cat:"chaussures", photo:"images/Damier maron.jpg" },
-    { id:18, nom:"H Blanc Chocolat",                sous:"Claquette bicolore blanc & chocolat", prix:19900, badge:"new", cat:"chaussures", photo:"images/H Blanc chocolat.jpg" },
+    // — Collection Homme (pièces solo) —
+    { id:1,  nom:"Alpha Croco",             sous:"Claquette double bride façon croco",  prix:11000, cat:"chaussures", photo:"images/Collection Homme/Alpha Croco.jpeg" },
+    { id:2,  nom:"Aura Noir",               sous:"Claquette noire épurée",              prix:11000, cat:"chaussures", photo:"images/Collection Homme/Aura Noir.jpeg" },
+    { id:3,  nom:"Croiser Civ Kaki",        sous:"Sandale croisée kaki",                prix:11000, cat:"chaussures", photo:"images/Collection Homme/Croiser Civ kaki.jpg" },
+    { id:4,  nom:"Croiser Noire Civ",       sous:"Sandale croisée noire",               prix:11000, cat:"chaussures", photo:"images/Collection Homme/Croiser noire Civ.jpg" },
+    { id:5,  nom:"Croisier Noir",           sous:"Sandale croisée noire tressée",       prix:11000, cat:"chaussures", photo:"images/Collection Homme/Croisier Noir.jpeg" },
+    { id:6,  nom:"Dune Prestige",           sous:"Claquette ton sable",                 prix:11000, cat:"chaussures", photo:"images/Collection Homme/Dune prestige.jpeg" },
+    { id:7,  nom:"Elegance Croisier",       sous:"Sandale croisée élégante",             prix:11000, cat:"chaussures", photo:"images/Collection Homme/Elegance Croisier.jpeg" },
+    { id:8,  nom:"Elite Croco",             sous:"Claquette façon croco",               prix:11000, cat:"chaussures", photo:"images/Collection Homme/Elite Croco.jpeg" },
+    { id:9,  nom:"H Kaki",                  sous:"Claquette kaki bande H",              prix:11000, cat:"chaussures", photo:"images/Collection Homme/H Kaki.jpeg" },
+    { id:10, nom:"H Saïd",                  sous:"Claquette bande H",                   prix:11000, cat:"chaussures", photo:"images/Collection Homme/H Said.jpg" },
+    { id:11, nom:"H Velours",               sous:"Claquette bande velours",             prix:11000, cat:"chaussures", photo:"images/Collection Homme/H Velours.jpeg" },
+    { id:12, nom:"Ivoir Croisé",            sous:"Sandale croisée ivoire",              prix:11000, cat:"chaussures", photo:"images/Collection Homme/Ivoir croise.jpeg" },
+    { id:13, nom:"LV Unique",               sous:"Claquette bicolore bleu",             prix:11000, cat:"chaussures", photo:"images/Collection Homme/LV Unique.jpeg" },
+    { id:14, nom:"Snake Noir",              sous:"Claquette façon snake noire",         prix:11000, cat:"chaussures", photo:"images/Collection Homme/Snake Noir.jpeg" },
+    { id:15, nom:"Tapettes Velours",        sous:"Claquette double bride velours",      prix:11000, cat:"chaussures", photo:"images/Collection Homme/Tapettes Velours.jpeg" },
+    // — Ensembles (duo / duo + pochette) —
+    { id:16, nom:"Croisier Civ Kaki & Saccoche", sous:"Sandale croisée kaki + pochette assortie", prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/Croisier Civ kaki & Saccoche.jpeg" },
+    { id:17, nom:"Croisier Noir & Saccoche",     sous:"Sandale croisée noire + pochette assortie", prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/Croisier Noir & Saccoche.jpeg" },
+    { id:18, nom:"Croisé Damier Marron",         sous:"Sandale croisée motif damier",             prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Damier maron.jpg" },
+    { id:19, nom:"Duo Elegance Croisier",        sous:"Duo sandales croisées élégantes",          prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Elegance Croisier.jpeg" },
+    { id:20, nom:"Duo Elite Croco",              sous:"Duo claquettes façon croco",               prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Elite Croco.jpeg" },
+    { id:21, nom:"Duo H Saïd",                   sous:"Duo claquettes bande H",                   prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo H said.jpg" },
+    { id:22, nom:"Duo Majesté",                  sous:"Duo claquettes prestige",                  prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Majeste.jpeg" },
+    { id:23, nom:"Elite Croco & Saccoche",       sous:"Claquette façon croco + pochette assortie", prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/Elite Croco & Saccoche.jpeg" },
+    { id:24, nom:"Ensemble Snake",               sous:"Duo claquettes façon snake",               prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Ensemble Snake.jpeg" },
+    { id:25, nom:"H Blanc Chocolat",             sous:"Claquette bicolore blanc & chocolat",      prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/H Blanc chocolat.jpg" },
+    { id:26, nom:"H Saïd & Saccoche",            sous:"Claquette bande H + pochette assortie",    prix:17500, badge:"new", cat:"sacs", photo:"images/Ensemble/H Said & Saccoche.jpg" },
+    { id:27, nom:"Prestige Duo",                 sous:"Duo claquettes prestige",                  prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Prestige Duo.jpeg" },
   ],
   femme: [
-    { id:11, nom:"Ensemble LV Blanche",             sous:"Duo claquettes blanc & sable",       prix:19900, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg" },
-    { id:12, nom:"Blanc Noir",                      sous:"Claquette bicolore blanc & marron",    prix:19900, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.49.33 (1).jpeg" },
-    { id:13, nom:"Croco Boubou",                    sous:"Claquette façon croco",         prix:13000, badge:"new", cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.10 (3).jpeg" },
-    { id:14, nom:"LV Bleue",                        sous:"Claquette premium",             prix:11000, cat:"chaussures", photo:"images/WhatsApp Image 2026-06-15 at 15.48.11 (4).jpeg" },
-    { id:15, nom:"Ensemble NC",                     sous:"Duo claquettes ton naturel",        prix:19900, cat:"chaussures", photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.13 (1).jpeg" },
-    { id:16, nom:"Ensemble NC · Pack",              sous:"Duo claquettes + pochette assortie",     prix:17500, ancien:19900, badge:"solde", cat:"sacs", photo:"images/WhatsApp Image 2026-06-15 at 15.49.29.jpeg" },
-    { id:19, nom:"Damier Boucle",                   sous:"Mule damier avec boucle métallique", prix:9000, badge:"new", cat:"chaussures", photo:"images/Damien Femme.jpg" },
+    // — collection Femme (pièces solo) —
+    { id:28, nom:"Blanc Marron Femme",      sous:"Claquette bicolore blanc & marron",   prix:11000, cat:"chaussures", photo:"images/collection Femme/Blanc Marron Femme.jpeg" },
+    { id:29, nom:"Damier Boucle",           sous:"Mule damier avec boucle métallique",  prix:9000,  badge:"new", cat:"chaussures", photo:"images/collection Femme/Damien Femme.jpg" },
+    { id:30, nom:"H Papillon Femme",        sous:"Claquette bande papillon",            prix:11000, cat:"chaussures", photo:"images/collection Femme/H Pipillon femme.jpeg" },
+    { id:31, nom:"H Saïd Femme",            sous:"Claquette bande H",                   prix:11000, cat:"chaussures", photo:"images/collection Femme/H Said Femme.jpeg" },
+    // — Ensembles (duo) —
+    { id:32, nom:"Duo LV Blanc",            sous:"Duo claquettes blanc & sable",        prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo LV Blanc.jpeg" },
+    { id:33, nom:"Duo LV Bleue",            sous:"Duo claquettes bleues",               prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo LV bleue.jpg" },
+    { id:34, nom:"Duo Perle Rose",          sous:"Duo claquettes ornées de strass",     prix:19900, badge:"new", cat:"sacs", photo:"images/Ensemble/Duo Perle rose.jpg" },
   ]
 };
 
-const packs = [
-  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.49.33.jpeg",     tag:"Édition Atelier", nom:"Croiser Noir + Sac",  prix:17500, desc:"Claquette croisée + pochette assortie", tall:true,  genre:"homme" },
-  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg", tag:"Pièce signature", nom:"Ensemble H",          prix:19900, desc:"Duo claquettes grainées",                    tall:false, genre:"homme" },
-  { photo:"hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg", tag:"Best-seller",     nom:"Ensemble LV Blanche", prix:19900, desc:"Duo claquettes blanc & sable",               tall:false, genre:"femme" },
-  { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.09.jpeg",     tag:"Nouveauté",       nom:"Ensemble Snake",      prix:19900, desc:"Duo claquettes façon snake",                 tall:false, genre:"homme" },
-  { photo:"image pack/WhatsApp Image 2026-06-15 at 15.48.12 (2).jpeg", tag:"Duo exclusif",    nom:"Ensemble H & C",      prix:24000, desc:"Claquettes H + croisée",                     tall:false, genre:"homme" },
-];
+// Les "packs en vedette" (tête d'affiche, juste après le hero) = tous les Ensembles, dérivés du catalogue
+const packs = [...produits.homme, ...produits.femme]
+  .filter(p => p.cat === 'sacs')
+  .map(p => ({ id: p.id, photo: p.photo, nom: p.nom, prix: p.prix, desc: p.sous }));
 
 // Captures WhatsApp réelles (dossier public/image Avis clients/)
 const avisImages = [1, 2, 3, 4, 5, 6, 7].map(n => `image Avis clients/avis client ${n}.jpg`);
@@ -1401,19 +1432,25 @@ function buildMarquee() {
 // ══════════════════════════════════════════
 function renderPacks() {
   document.getElementById('pack-grid').innerHTML = packs.map((p, i) => `
-    <div class="pack-card reveal d${(i%3)+1} ${p.tall?'tall':''}"
-         onclick="showSection('${p.genre}');document.getElementById('catalogue').scrollIntoView({behavior:'smooth'})"
+    <div class="pack-card reveal d${(i%3)+1}"
+         onclick="openQuick(${p.id})"
          role="button" tabindex="0"
          onkeydown="if(event.key==='Enter')this.click()">
       <img src="${imgUrl(p.photo)}" alt="${p.nom}" loading="lazy">
       <div class="pack-overlay">
-        <div class="pack-tag">${p.tag}</div>
+        <div class="pack-tag">Nouveauté</div>
         <div class="pack-name">${p.nom}</div>
         <div class="pack-desc">${p.desc}</div>
         <div class="pack-price">${formatPrix(p.prix)}</div>
-        <div class="pack-cta">Voir la collection →</div>
       </div>
     </div>`).join('');
+}
+
+function packScroll(dir) {
+  const c = document.getElementById('pack-grid');
+  const card = c.querySelector('.pack-card');
+  const step = card ? card.getBoundingClientRect().width + 18 : 300;
+  c.scrollBy({ left: dir * step, behavior: 'smooth' });
 }
 
 // ══════════════════════════════════════════
@@ -1799,9 +1836,9 @@ function sofiaReply(msg) {
   if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre numéro de commande (format LSA-XXXXX) et je vous donne l'état de votre colis en temps réel.";
   if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
     return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
-  if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales vont de 9 000 à 24 000 FCFA. Les ensembles (chaussures + pochette) sont entre 17 500 et 24 000 FCFA 😊";
+  if (has('prix','coût','cout','combien','tarif'))         return "Nos claquettes & sandales solo sont à 9 000 ou 11 000 FCFA. Les ensembles (duo, parfois + pochette) sont entre 17 500 et 19 900 FCFA 😊";
   if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
-  if (has('pochette','sac','clutch'))                      return "Nos pochettes avec dragonne accompagnent parfaitement nos sandales 👝. Retrouvez-les dans l'onglet « Pochettes » du catalogue.";
+  if (has('pochette','sac','clutch'))                      return "Certains de nos ensembles duo incluent une pochette assortie 👝. Retrouvez-les dans l'onglet « Ensembles » du catalogue.";
   if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Sofia, votre conseillère. Comment puis-je vous aider ?";
   if (has('merci','super','parfait','génial','genial'))    return "Avec grand plaisir 🤍 N'hésitez pas pour toute question. Bel shopping chez LSA !";
   if (has('contact','whatsapp','téléphone','telephone','instagram','facebook','tiktok','réseau'))
