@@ -1605,6 +1605,16 @@ function filterCat(genre, cat) {
   document.getElementById('catalogue').scrollIntoView({ behavior:'smooth' });
 }
 
+// Fait défiler la page pour centrer un élément dans la fenêtre, en calculant la position
+// nous-mêmes plutôt qu'en passant par scrollIntoView : ce dernier n'aboutit pas de façon fiable
+// quand il est déclenché après coup (setTimeout, retour direct depuis un lien de pub, etc.).
+function scrollElementIntoCenter(el) {
+  if (!el) return;
+  const rect = el.getBoundingClientRect();
+  const target = rect.top + window.scrollY - (window.innerHeight / 2) + (rect.height / 2);
+  window.scrollTo({ top: Math.max(0, target), left: 0, behavior: 'instant' });
+}
+
 // Depuis un carrousel (ensembles en vedette) ou un lien direct (#produit-ID, pour les pubs) :
 // amène d'abord vers l'emplacement du produit dans le catalogue, sans ouvrir la fiche de commande.
 function goToProduct(id) {
@@ -1614,14 +1624,18 @@ function goToProduct(id) {
   const fzone = document.querySelector('.filters[data-genre="'+genre+'"]');
   if (fzone) fzone.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat==='all'));
   renderGrid(genre);
-  setTimeout(() => {
+  const scrollToProduct = () => {
     const el = document.getElementById('produit-' + id);
     if (!el) return;
-    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    scrollElementIntoCenter(el);
     el.classList.remove('pack-highlight');
     void el.offsetWidth;
     el.classList.add('pack-highlight');
-  }, 60);
+  };
+  // Deux passages : le premier pour un retour rapide, le second en filet de sécurité
+  // si des images encore en chargement plus haut dans la page ont décalé la mise en page entre-temps.
+  setTimeout(scrollToProduct, 80);
+  setTimeout(scrollToProduct, 800);
 }
 
 // Liens directs pour les campagnes pub : #produit-<id>, #section-homme, #section-femme
@@ -1630,8 +1644,8 @@ function handleDeepLink() {
   if (!hash) return;
   const produitMatch = hash.match(/^produit-(\d+)$/);
   if (produitMatch) { goToProduct(parseInt(produitMatch[1], 10)); return; }
-  if (hash === 'section-homme') { showSection('homme'); document.getElementById('section-homme').scrollIntoView({ behavior:'smooth' }); return; }
-  if (hash === 'section-femme') { showSection('femme'); document.getElementById('section-femme').scrollIntoView({ behavior:'smooth' }); return; }
+  if (hash === 'section-homme') { showSection('homme'); scrollElementIntoCenter(document.getElementById('section-homme')); return; }
+  if (hash === 'section-femme') { showSection('femme'); scrollElementIntoCenter(document.getElementById('section-femme')); return; }
 }
 
 // ══════════════════════════════════════════
@@ -2047,7 +2061,15 @@ initFilters();
 observeReveals();
 packAutoCtl = initAutoCarousel('pack-grid', '.pack-card');
 avisAutoCtl = initAutoCarousel('avis-carousel', '.avis-shot');
-if (location.hash) setTimeout(handleDeepLink, 300);
+// Le lien direct d'une pub arrive souvent sur une page pas encore totalement chargée (images en cours) :
+// on attend le chargement complet pour que le calcul de position de scroll soit fiable.
+if (location.hash) {
+  if (document.readyState === 'complete') {
+    setTimeout(handleDeepLink, 150);
+  } else {
+    window.addEventListener('load', () => setTimeout(handleDeepLink, 150));
+  }
+}
 window.addEventListener('hashchange', handleDeepLink);
 
 // Image atelier (lazy via data-src)
