@@ -526,6 +526,11 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     box-shadow: var(--shadow-soft);
   }
   .product-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); }
+  .product-card.pack-highlight { animation: packHighlight 1.6s ease; }
+  @keyframes packHighlight {
+    0%, 100% { box-shadow: var(--shadow-soft); }
+    25%, 75% { box-shadow: 0 0 0 3px var(--or), var(--shadow-hover); }
+  }
   .product-img {
     aspect-ratio: 1/1; overflow: hidden; position: relative;
     background: #f0ede8;
@@ -1151,7 +1156,7 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
 </section>
 
 <!-- ═══════════════ TÉMOIGNAGES (captures WhatsApp réelles) ═══════════════ -->
-<section class="avis">
+<section class="avis" id="avis">
   <div class="avis-head reveal">
     <p class="section-eyebrow">Ils portent LSA</p>
     <h2 class="section-title">La parole à nos <em>clients</em></h2>
@@ -1166,7 +1171,7 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
 </section>
 
 <!-- ═══════════════ WHATSAPP CTA ═══════════════ -->
-<section class="wa-cta">
+<section class="wa-cta" id="contact">
   <div class="reveal">
     <p class="section-eyebrow">Commande directe</p>
     <h2 class="section-title">Une question ? Une commande ?<br><em>Écrivez-nous.</em></h2>
@@ -1322,10 +1327,13 @@ const produits = {
   ]
 };
 
-// Les "packs en vedette" (tête d'affiche, juste après le hero) = tous les Ensembles, dérivés du catalogue
-const packs = [...produits.homme, ...produits.femme]
-  .filter(p => p.cat === 'sacs')
-  .map(p => ({ id: p.id, photo: p.photo, nom: p.nom, prix: p.prix, desc: p.sous }));
+// Les "packs en vedette" (tête d'affiche, juste après le hero) : sélection et ordre curatés à la main
+// — les photos les plus frappantes en tête, les moins flatteuses en fin de carrousel.
+const packOrder = [26, 25, 18, 3, 23, 32, 19, 27, 17, 33, 20, 34, 21, 22, 4];
+const packs = packOrder.map(id => {
+  const p = [...produits.homme, ...produits.femme].find(x => x.id === id);
+  return { id: p.id, photo: p.photo, nom: p.nom, prix: p.prix, desc: p.sous };
+});
 
 // Captures WhatsApp réelles (dossier public/image Avis clients/)
 const avisImages = [1, 2, 3, 4, 5, 6, 7].map(n => `image Avis clients/avis client ${n}.jpg`);
@@ -1452,7 +1460,7 @@ function buildMarquee() {
 function renderPacks() {
   document.getElementById('pack-grid').innerHTML = packs.map((p, i) => `
     <div class="pack-card reveal d${(i%3)+1}"
-         onclick="openQuick(${p.id})"
+         onclick="goToProduct(${p.id})"
          role="button" tabindex="0"
          onkeydown="if(event.key==='Enter')this.click()">
       <img src="${imgUrl(p.photo)}" alt="${p.nom}" loading="lazy">
@@ -1542,7 +1550,7 @@ function renderGrid(genre) {
     return;
   }
   grid.innerHTML = items.map((p, i) => `
-    <div class="product-card reveal d${(i%3)+1}">
+    <div class="product-card reveal d${(i%3)+1}" id="produit-${p.id}">
       <div class="product-img" onclick="openQuick(${p.id})">
         <img src="${imgUrl(p.photo)}" alt="${p.nom}" loading="lazy"
              onerror="this.parentNode.innerHTML='<div class=\\'img-placeholder\\'>🩴</div>'">
@@ -1595,6 +1603,35 @@ function filterCat(genre, cat) {
   if (fzone) fzone.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat===cat));
   renderGrid(genre);
   document.getElementById('catalogue').scrollIntoView({ behavior:'smooth' });
+}
+
+// Depuis un carrousel (ensembles en vedette) ou un lien direct (#produit-ID, pour les pubs) :
+// amène d'abord vers l'emplacement du produit dans le catalogue, sans ouvrir la fiche de commande.
+function goToProduct(id) {
+  const genre = produits.homme.some(p => p.id === id) ? 'homme' : 'femme';
+  showSection(genre);
+  activeFilter[genre] = 'all';
+  const fzone = document.querySelector('.filters[data-genre="'+genre+'"]');
+  if (fzone) fzone.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.cat==='all'));
+  renderGrid(genre);
+  setTimeout(() => {
+    const el = document.getElementById('produit-' + id);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.remove('pack-highlight');
+    void el.offsetWidth;
+    el.classList.add('pack-highlight');
+  }, 60);
+}
+
+// Liens directs pour les campagnes pub : #produit-<id>, #section-homme, #section-femme
+function handleDeepLink() {
+  const hash = location.hash.slice(1);
+  if (!hash) return;
+  const produitMatch = hash.match(/^produit-(\d+)$/);
+  if (produitMatch) { goToProduct(parseInt(produitMatch[1], 10)); return; }
+  if (hash === 'section-homme') { showSection('homme'); document.getElementById('section-homme').scrollIntoView({ behavior:'smooth' }); return; }
+  if (hash === 'section-femme') { showSection('femme'); document.getElementById('section-femme').scrollIntoView({ behavior:'smooth' }); return; }
 }
 
 // ══════════════════════════════════════════
@@ -2010,6 +2047,8 @@ initFilters();
 observeReveals();
 packAutoCtl = initAutoCarousel('pack-grid', '.pack-card');
 avisAutoCtl = initAutoCarousel('avis-carousel', '.avis-shot');
+if (location.hash) setTimeout(handleDeepLink, 300);
+window.addEventListener('hashchange', handleDeepLink);
 
 // Image atelier (lazy via data-src)
 (function(){
