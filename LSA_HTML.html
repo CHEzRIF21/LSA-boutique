@@ -1718,6 +1718,17 @@ function openQuick(id) {
   // la barre d'adresse, redirige n'importe qui directement sur la fiche d'achat de cet article —
   // pratique pour les campagnes pub ciblées par produit. replaceState ne déclenche pas hashchange.
   history.replaceState(null, '', '#' + slugify(p.nom));
+  // Rattache le pixel Meta au lien de CE produit : permet de suivre, par article, le passage
+  // de la vue de la fiche (ici) jusqu'à la commande WhatsApp (événement Lead à la validation).
+  if (window.fbq) {
+    fbq('track', 'ViewContent', {
+      content_ids: [String(p.id)],
+      content_name: p.nom,
+      content_type: 'product',
+      value: p.prix,
+      currency: 'XOF'
+    });
+  }
 }
 function closeQuick() {
   document.getElementById('qv-modal').classList.remove('open');
@@ -1958,7 +1969,23 @@ function submitOrderForm(e) {
 
   const message = buildOrderMessage(nom, ville, tel);
   qvLastOrderUrl = `https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(message)}`;
-  if (window.fbq) fbq('track', 'Lead', { value: cartTotal(), currency: 'XOF' });
+  // Événement de conversion rattaché à CHAQUE article du panier validé (ids, noms, quantités,
+  // prix) : permet de suivre, pour chaque lien produit, le passage à l'action jusqu'à WhatsApp.
+  if (window.fbq) {
+    const lignes = panier.map(item => {
+      const p = findProduit(item.id);
+      return { id: String(p.id), quantity: item.qty, item_price: p.prix };
+    });
+    fbq('track', 'Lead', {
+      content_ids: lignes.map(l => l.id),
+      content_type: 'product',
+      content_name: panier.map(item => findProduit(item.id).nom).join(', '),
+      contents: lignes,
+      num_items: panier.reduce((s, i) => s + i.qty, 0),
+      value: cartTotal(),
+      currency: 'XOF'
+    });
+  }
   window.open(qvLastOrderUrl, '_blank', 'noopener');
   panier = []; updateCartBadge(); qvPendingKey = null;
   qvFlowStep = 'success';
