@@ -1327,6 +1327,18 @@ const produits = {
   ]
 };
 
+// Lien direct par nom de produit (ex: lsaboutique.com/#croise-damier-marron) — pour les pubs :
+// s'ouvre directement sur la fiche d'achat du produit concerné, pas juste sur son emplacement.
+function slugify(str) {
+  const combiningMarks = new RegExp('[̀-ͯ]', 'g');
+  return str.normalize('NFD').replace(combiningMarks, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+const produitSlugToId = {};
+[...produits.homme, ...produits.femme].forEach(p => { produitSlugToId[slugify(p.nom)] = p.id; });
+
 // Les "packs en vedette" (tête d'affiche, juste après le hero) : sélection et ordre curatés à la main
 // — les photos les plus frappantes en tête, les moins flatteuses en fin de carrousel.
 const packOrder = [26, 25, 18, 3, 23, 32, 19, 27, 17, 33, 20, 34, 21, 22, 4];
@@ -1638,10 +1650,14 @@ function goToProduct(id) {
   setTimeout(scrollToProduct, 800);
 }
 
-// Liens directs pour les campagnes pub : #produit-<id>, #section-homme, #section-femme
+// Liens directs pour les campagnes pub :
+//  #nom-du-produit  → ouvre directement la fiche d'achat (ex: #croise-damier-marron)
+//  #produit-<id>    → amène à l'emplacement du produit dans le catalogue, sans ouvrir la fiche
+//  #section-homme / #section-femme → ouvre l'onglet correspondant
 function handleDeepLink() {
   const hash = location.hash.slice(1);
   if (!hash) return;
+  if (produitSlugToId[hash] !== undefined) { openQuick(produitSlugToId[hash]); return; }
   const produitMatch = hash.match(/^produit-(\d+)$/);
   if (produitMatch) { goToProduct(parseInt(produitMatch[1], 10)); return; }
   if (hash === 'section-homme') { showSection('homme'); scrollElementIntoCenter(document.getElementById('section-homme')); return; }
@@ -1698,8 +1714,15 @@ function openQuick(id) {
   qvId = id; qvSize = null; qvSizeH = null; qvSizeF = null; qvQty = 1; qvColor = ''; qvFlowStep = 'article'; qvPendingKey = null;
   document.getElementById('qv-modal').classList.add('open');
   renderQvModal();
+  // Met à jour l'URL avec le nom du produit (ex: #croise-damier-marron) : ce lien, copié depuis
+  // la barre d'adresse, redirige n'importe qui directement sur la fiche d'achat de cet article —
+  // pratique pour les campagnes pub ciblées par produit. replaceState ne déclenche pas hashchange.
+  history.replaceState(null, '', '#' + slugify(p.nom));
 }
-function closeQuick() { document.getElementById('qv-modal').classList.remove('open'); }
+function closeQuick() {
+  document.getElementById('qv-modal').classList.remove('open');
+  if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+}
 
 // Ouvre directement l'étape « coordonnées » (bouton panier de la nav) si des articles ont déjà été choisis.
 function openOrderPanel() {
