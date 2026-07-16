@@ -1176,7 +1176,7 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     <p class="section-eyebrow">Commande directe</p>
     <h2 class="section-title">Une question ? Une commande ?<br><em>Écrivez-nous.</em></h2>
     <p>Notre équipe vous répond sur WhatsApp en quelques minutes — conseils de pointure, disponibilité, livraison, tout y passe.</p>
-    <a class="wa-btn" href="https://wa.me/2290196685554?text=Bonjour%20LSA%20%F0%9F%91%8B%20Je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener" onclick="if(window.fbq)fbq('track','Contact')">
+    <a class="wa-btn" href="https://wa.me/2290196685554?text=Bonjour%20LSA%20%F0%9F%91%8B%20Je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener" onclick="trackWhatsAppLead({ content_name: 'Bouton WhatsApp — accueil' })">
       <span>📱</span> Commander sur WhatsApp
     </a>
   </div>
@@ -1718,17 +1718,8 @@ function openQuick(id) {
   // la barre d'adresse, redirige n'importe qui directement sur la fiche d'achat de cet article —
   // pratique pour les campagnes pub ciblées par produit. replaceState ne déclenche pas hashchange.
   history.replaceState(null, '', '#' + slugify(p.nom));
-  // Rattache le pixel Meta au lien de CE produit : permet de suivre, par article, le passage
-  // de la vue de la fiche (ici) jusqu'à la commande WhatsApp (événement Lead à la validation).
-  if (window.fbq) {
-    fbq('track', 'ViewContent', {
-      content_ids: [String(p.id)],
-      content_name: p.nom,
-      content_type: 'product',
-      value: p.prix,
-      currency: 'XOF'
-    });
-  }
+  // NB : l'ouverture d'une fiche ne déclenche AUCUN événement pixel. Le pixel Meta ne mesure que
+  // le passage à l'action final (clic « Commander sur WhatsApp » → discussion WhatsApp). Voir trackWhatsAppLead().
 }
 function closeQuick() {
   document.getElementById('qv-modal').classList.remove('open');
@@ -1960,6 +1951,16 @@ function buildOrderMessage(nom, ville, tel) {
   return `Bonjour LSA 👋 Je souhaite passer la commande suivante :\n\n${lignes}\n\nTotal : ${formatPrix(cartTotal())}\n\nMes coordonnées :\nNom : ${nom}\nVille : ${ville}\nTéléphone : ${tel}\n\nMerci de me confirmer la disponibilité 🙏`;
 }
 
+// ══════════════════════════════════════════
+// PIXEL META — UN SEUL événement de conversion : « Lead ».
+// Il ne se déclenche QUE sur un clic d'un bouton final « Commander sur WhatsApp » qui redirige
+// vers la discussion WhatsApp avec l'administrateur (bouton d'accueil + bouton de validation du
+// tunnel). C'est le passage à l'action que la boutique mesure et optimise en pub. Aucune vue de
+// fiche, aucun lien de contact WhatsApp simple ne déclenche le pixel.
+function trackWhatsAppLead(details) {
+  if (window.fbq) fbq('track', 'Lead', details || {});
+}
+
 function submitOrderForm(e) {
   e.preventDefault();
   const nom  = document.getElementById('f-nom').value.trim();
@@ -1969,23 +1970,21 @@ function submitOrderForm(e) {
 
   const message = buildOrderMessage(nom, ville, tel);
   qvLastOrderUrl = `https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(message)}`;
-  // Événement de conversion rattaché à CHAQUE article du panier validé (ids, noms, quantités,
-  // prix) : permet de suivre, pour chaque lien produit, le passage à l'action jusqu'à WhatsApp.
-  if (window.fbq) {
-    const lignes = panier.map(item => {
-      const p = findProduit(item.id);
-      return { id: String(p.id), quantity: item.qty, item_price: p.prix };
-    });
-    fbq('track', 'Lead', {
-      content_ids: lignes.map(l => l.id),
-      content_type: 'product',
-      content_name: panier.map(item => findProduit(item.id).nom).join(', '),
-      contents: lignes,
-      num_items: panier.reduce((s, i) => s + i.qty, 0),
-      value: cartTotal(),
-      currency: 'XOF'
-    });
-  }
+  // Conversion enrichie avec le détail du panier validé (ids, noms, quantités, prix, total) :
+  // permet de suivre le passage à l'action jusqu'à chaque produit / ensemble commandé.
+  const lignes = panier.map(item => {
+    const p = findProduit(item.id);
+    return { id: String(p.id), quantity: item.qty, item_price: p.prix };
+  });
+  trackWhatsAppLead({
+    content_ids: lignes.map(l => l.id),
+    content_type: 'product',
+    content_name: panier.map(item => findProduit(item.id).nom).join(', '),
+    contents: lignes,
+    num_items: panier.reduce((s, i) => s + i.qty, 0),
+    value: cartTotal(),
+    currency: 'XOF'
+  });
   window.open(qvLastOrderUrl, '_blank', 'noopener');
   panier = []; updateCartBadge(); qvPendingKey = null;
   qvFlowStep = 'success';
