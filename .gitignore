@@ -12,3 +12,8 @@ Thumbs.db
 
 .vercel
 .env*.local
+
+# Vidéo source lourde (55 Mo) : convertie en public/hero Image/video-hero.mp4 (6 Mo).
+# Conservée en local mais jamais versionnée ni déployée.
+*.MOV
+*.mov

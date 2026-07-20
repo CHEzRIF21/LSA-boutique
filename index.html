@@ -240,15 +240,12 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     overflow: hidden; background: var(--noir);
     display: flex; align-items: flex-end;
   }
-  .hero-slides { position: absolute; inset: 0; }
-  .hero-slide {
-    position: absolute; inset: 0;
-    background-size: cover; background-position: center;
-    opacity: 0; transition: opacity 1.3s var(--ease);
-    transform: scale(1.07);
+  .hero-video {
+    position: absolute; inset: 0; z-index: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center;
+    background: var(--noir);
   }
-  .hero-slide.active { opacity: 1; animation: kbZoom 9s ease-out forwards; }
-  @keyframes kbZoom { from { transform: scale(1.07); } to { transform: scale(1); } }
 
   .hero-overlay {
     position: absolute; inset: 0; z-index: 1;
@@ -290,43 +287,6 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     margin-bottom: 2.6rem; max-width: 400px;
   }
   .hero-btns { display: flex; flex-wrap: wrap; gap: 0.9rem; }
-
-  .hero-footer {
-    position: absolute; bottom: 2.3rem; left: 3rem; right: 3rem; z-index: 3;
-    display: flex; align-items: center; justify-content: space-between; gap: 2rem;
-  }
-  .hero-dots { display: flex; gap: 0.55rem; align-items: center; }
-  .hero-dot {
-    position: relative; width: 30px; height: 3px;
-    background: rgba(248,244,239,0.25);
-    cursor: pointer; border: none; padding: 0; overflow: hidden;
-    transition: width 0.3s var(--ease);
-  }
-  .hero-dot.active { width: 52px; }
-  .hero-dot .fill {
-    position: absolute; inset: 0; background: var(--or);
-    transform: scaleX(0); transform-origin: left;
-  }
-  .hero-dot.active .fill { animation: dotFill 6s linear forwards; }
-  @keyframes dotFill { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-
-  .hero-counter {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 0.95rem; color: rgba(248,244,239,0.55);
-    letter-spacing: 0.2em; user-select: none; white-space: nowrap;
-  }
-  .hero-counter b { color: var(--or-pale); font-weight: 400; font-size: 1.35rem; }
-
-  .hero-arrows { display: flex; gap: 0.5rem; }
-  .hero-arrow {
-    background: rgba(10,10,10,0.35); border: 1px solid rgba(184,151,90,0.28);
-    color: var(--or-pale); width: 44px; height: 44px;
-    cursor: pointer; font-size: 0.95rem;
-    display: flex; align-items: center; justify-content: center;
-    transition: background 0.2s, border-color 0.2s, transform 0.2s;
-    -webkit-appearance: none; appearance: none;
-  }
-  .hero-arrow:hover { background: rgba(184,151,90,0.22); border-color: var(--or); transform: translateY(-2px); }
 
   .hero-stats {
     position: absolute; right: 3rem; top: 50%; transform: translateY(-50%);
@@ -969,8 +929,6 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     .hamburger { display: flex; }
     .hero-content { padding: 0 1.4rem 6rem; max-width: 100%; }
     .hero-stats { display: none; }
-    .hero-arrows { display: none; }
-    .hero-footer { left: 1.4rem; right: 1.4rem; bottom: 1.8rem; }
     .featured { padding: 3.8rem 1.2rem 2rem; }
     .atelier { padding: 4rem 1.2rem; }
     .avis { padding: 4rem 0; }
@@ -1001,7 +959,6 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     .btn-cart { font-size: 0.58rem; padding: 0.58rem 0.3rem; letter-spacing: 0.08em; }
     .hero-btns { flex-direction: column; align-items: flex-start; }
     .form-row { grid-template-columns: 1fr; }
-    .hero-counter { display: none; }
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -1049,7 +1006,10 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
 
 <!-- ═══════════════ HERO ═══════════════ -->
 <section id="hero" aria-label="Présentation LSA">
-  <div class="hero-slides" id="hero-slides"></div>
+  <video class="hero-video" id="hero-video" autoplay muted loop playsinline preload="auto"
+         poster="public/hero%20Image/hero-poster.jpg">
+    <source src="public/hero%20Image/video-hero.mp4" type="video/mp4">
+  </video>
   <div class="hero-overlay"></div>
   <div class="hero-grid"></div>
 
@@ -1069,14 +1029,6 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     </div>
   </div>
 
-  <div class="hero-footer">
-    <div class="hero-dots" id="hero-dots" role="tablist" aria-label="Slides"></div>
-    <div class="hero-counter" aria-hidden="true"><b id="hero-idx">01</b> — 04</div>
-    <div class="hero-arrows">
-      <button class="hero-arrow" onclick="heroNav(-1)" aria-label="Slide précédente">←</button>
-      <button class="hero-arrow" onclick="heroNav(1)" aria-label="Slide suivante">→</button>
-    </div>
-  </div>
 </section>
 
 <!-- ═══════════════ MARQUEE ═══════════════ -->
@@ -1268,13 +1220,6 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 // ══════════════════════════════════════════
 // DONNÉES
 // ══════════════════════════════════════════
-const heroImages = [
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.49.33.jpeg",     titre: "L'artisanat,<br>porté comme un <em>art</em>",    sous: "LSA — Luxury Artisanal · Cotonou" },
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.49.32 (2).jpeg", titre: "L'élégance<br>dans chaque <em>détail</em>",      sous: "Claquettes & mules — finition grainée" },
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (2).jpeg", titre: "Artisanat<br>& <em>raffinement</em>",            sous: "Ensembles premium — Femme" },
-  { file: "hero Image/WhatsApp Image 2026-06-15 at 15.48.10 (3).jpeg", titre: "La couleur<br>du <em>luxe</em>",                 sous: "Claquettes — Collection exclusive" }
-];
-
 const marqueeItems = [
   '<b>Matières nobles</b>', '<b>Fait main au Bénin</b>', '<b>Livraison Afrique & International</b>',
   '<b>Paiement à la livraison</b>', '<b>Retours sous 14 jours</b>', '<b>Mobile Money accepté</b>'
@@ -1369,78 +1314,20 @@ function observeReveals() {
 window.revealReady = true;
 
 // ══════════════════════════════════════════
-// HERO CAROUSEL
+// HERO VIDÉO
 // ══════════════════════════════════════════
-let heroIdx = 0, heroTimer = null;
-
-function buildHero() {
-  const container = document.getElementById('hero-slides');
-  const dotsContainer = document.getElementById('hero-dots');
-  heroImages.forEach((h, i) => {
-    const slide = document.createElement('div');
-    slide.className = 'hero-slide' + (i === 0 ? ' active' : '');
-    slide.style.backgroundImage = `url('${imgUrl(h.file)}')`;
-    container.appendChild(slide);
-
-    const dot = document.createElement('button');
-    dot.className = 'hero-dot' + (i === 0 ? ' active' : '');
-    dot.setAttribute('role', 'tab');
-    dot.setAttribute('aria-label', `Slide ${i+1}`);
-    dot.innerHTML = '<span class="fill"></span>';
-    dot.onclick = () => goToSlide(i);
-    dotsContainer.appendChild(dot);
-  });
-  // Préchargement des images suivantes après le chargement de la page
-  window.addEventListener('load', () => {
-    heroImages.slice(1).forEach(h => { const im = new Image(); im.src = imgUrl(h.file); });
-  });
-}
-
-function restartDotFill(dot) {
-  const fill = dot.querySelector('.fill');
-  if (!fill) return;
-  fill.style.animation = 'none';
-  void fill.offsetWidth; // reflow pour relancer l'animation
-  fill.style.animation = '';
-}
-
-function goToSlide(idx) {
-  const slides = document.querySelectorAll('.hero-slide');
-  const dots   = document.querySelectorAll('.hero-dot');
-  slides[heroIdx].classList.remove('active');
-  dots[heroIdx].classList.remove('active');
-  heroIdx = (idx + heroImages.length) % heroImages.length;
-  slides[heroIdx].classList.add('active');
-  dots[heroIdx].classList.add('active');
-  restartDotFill(dots[heroIdx]);
-  const h = heroImages[heroIdx];
-  document.getElementById('hero-title').innerHTML = h.titre;
-  document.getElementById('hero-eyebrow').textContent = h.sous;
-  document.getElementById('hero-idx').textContent = String(heroIdx + 1).padStart(2, '0');
-  resetHeroTimer();
-}
-
-function heroNav(dir) { goToSlide(heroIdx + dir); }
-
-function resetHeroTimer() {
-  clearInterval(heroTimer);
-  if (!reducedMotion) heroTimer = setInterval(() => goToSlide(heroIdx + 1), 6000);
-}
-
-function initHeroInteractions() {
-  const hero = document.getElementById('hero');
-  // Pause au survol
-  hero.addEventListener('mouseenter', () => clearInterval(heroTimer));
-  hero.addEventListener('mouseleave', resetHeroTimer);
-  // Swipe tactile
-  let touchX = null;
-  hero.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
-  hero.addEventListener('touchend', e => {
-    if (touchX === null) return;
-    const dx = e.changedTouches[0].clientX - touchX;
-    if (Math.abs(dx) > 45) heroNav(dx < 0 ? 1 : -1);
-    touchX = null;
-  }, { passive: true });
+function initHeroVideo() {
+  const v = document.getElementById('hero-video');
+  if (!v) return;
+  // Certains navigateurs mobiles bloquent l'autoplay tant qu'on n'appelle pas play() ;
+  // muted + playsinline (déjà dans le HTML) autorise la lecture automatique sans son.
+  const tryPlay = () => { const p = v.play(); if (p && p.catch) p.catch(() => {}); };
+  if (reducedMotion) { v.removeAttribute('autoplay'); v.pause(); return; }
+  tryPlay();
+  // Filet de sécurité : relancer la lecture au premier contact utilisateur si l'autoplay a été bloqué.
+  const resume = () => { if (v.paused) tryPlay(); };
+  document.addEventListener('touchstart', resume, { once: true, passive: true });
+  document.addEventListener('click', resume, { once: true });
 }
 
 // ══════════════════════════════════════════
@@ -2098,9 +1985,7 @@ function closeMobileNav() {
 // ══════════════════════════════════════════
 // INITIALISATION
 // ══════════════════════════════════════════
-buildHero();
-initHeroInteractions();
-resetHeroTimer();
+initHeroVideo();
 buildMarquee();
 renderPacks();
 renderAvis();
