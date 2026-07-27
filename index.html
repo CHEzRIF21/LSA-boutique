@@ -918,12 +918,19 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     white-space: nowrap; opacity: 0; animation: quickBtnIn 0.4s ease forwards;
   }
   .quick-btn:hover { border-color: var(--or); color: var(--or); }
+  /* Boutons d'action (toujours dispo) : « Voir la boutique » et « Conseiller WhatsApp ». */
+  .quick-action { border-color: var(--or); color: var(--or); font-weight: 500; }
+  .quick-action:hover { background: var(--or); color: white; }
+  /* Une suggestion déjà posée disparaît, les autres restent pour poursuivre la conversation. */
+  .quick-btn.used { display: none; }
   /* Les suggestions apparaissent l'une après l'autre plutôt que toutes d'un coup. */
   .quick-btn:nth-child(1) { animation-delay: 0.2s; }
-  .quick-btn:nth-child(2) { animation-delay: 0.45s; }
-  .quick-btn:nth-child(3) { animation-delay: 0.7s; }
-  .quick-btn:nth-child(4) { animation-delay: 0.95s; }
-  .quick-btn:nth-child(5) { animation-delay: 1.2s; }
+  .quick-btn:nth-child(2) { animation-delay: 0.4s; }
+  .quick-btn:nth-child(3) { animation-delay: 0.6s; }
+  .quick-btn:nth-child(4) { animation-delay: 0.8s; }
+  .quick-btn:nth-child(5) { animation-delay: 1s; }
+  .quick-btn:nth-child(6) { animation-delay: 1.2s; }
+  .quick-btn:nth-child(7) { animation-delay: 1.4s; }
   @keyframes quickBtnIn {
     from { opacity: 0; transform: translateY(6px); }
     to { opacity: 1; transform: translateY(0); }
@@ -1266,11 +1273,13 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
   </div>
   <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
   <div class="quick-replies" id="quick-replies">
-    <button class="quick-btn" onclick="sendQuick('Quels sont vos délais de livraison ?')">🚚 Livraison</button>
-    <button class="quick-btn" onclick="sendQuick('Comment faire un retour ?')">↩ Retours</button>
-    <button class="quick-btn" onclick="sendQuick('Je veux suivre ma commande')">📦 Suivi</button>
-    <button class="quick-btn" onclick="sendQuick('Quelles tailles sont disponibles ?')">📏 Tailles</button>
-    <button class="quick-btn" onclick="sendQuick('Puis-je commander une confection sur mesure ?')">✂️ Sur-mesure</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Quels sont vos délais de livraison ?')">🚚 Livraison</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Comment faire un retour ?')">↩ Retours</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Je veux suivre ma commande')">📦 Suivi</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Quelles tailles sont disponibles ?')">📏 Tailles</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Puis-je commander une confection sur mesure ?')">✂️ Sur-mesure</button>
+    <button class="quick-btn quick-action" onclick="chatToCatalogue()">🛍️ Voir la boutique</button>
+    <button class="quick-btn quick-action" onclick="chatToWhatsApp()">💬 Conseiller WhatsApp</button>
   </div>
   <div class="chat-input-row">
     <input class="chat-input" id="chat-input" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendMessage()" aria-label="Message">
@@ -2016,25 +2025,56 @@ function newsletterSubmit(e) {
 function toggleChat() { document.getElementById('chat-window').classList.toggle('open'); }
 function openChat()   { document.getElementById('chat-window').classList.add('open'); }
 
+// Ferme le chat et amène le client au catalogue (bouton d'action « Voir la boutique »).
+function chatToCatalogue() {
+  document.getElementById('chat-window').classList.remove('open');
+  const el = document.getElementById('catalogue');
+  if (el) {
+    const y = el.getBoundingClientRect().top + window.scrollY - 70;
+    window.scrollTo({ top: Math.max(0, y), left: 0, behavior: 'smooth' });
+  }
+}
+
+// Passe la main à un vrai conseiller sur WhatsApp, avec un message pré-rempli, et
+// enregistre le passage à l'action via le pixel (événement Contact).
+function chatToWhatsApp() {
+  const msg = "Bonjour LSA 👋 Je discutais avec Sofia sur le site et je souhaite parler à un conseiller.";
+  if (window.fbq) fbq('track', 'Contact');
+  window.open(`https://wa.me/${BOUTIQUE_WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+}
+
+// Rend une chaîne comparable : minuscules + suppression des accents (é→e, ï→i…).
+// Ainsi « delai », « délai », « Délais » correspondent tous, malgré accents ou fautes.
+function normalize(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
 function sofiaReply(msg) {
-  const t = msg.toLowerCase();
-  const has = (...k) => k.some(x => t.includes(x));
-  if (has('sur mesure','sur-mesure','mesure','confection','personnalis','custom'))
+  const t = normalize(msg);
+  const has = (...k) => k.some(x => t.includes(normalize(x)));
+  if (has('sur mesure','sur-mesure','confection','personnalis','custom','fabriqu','sur commande'))
     return "Bien sûr ✨ Au-delà de nos modèles, nous réalisons des confections sur mesure : dites-moi la chaussure souhaitée, votre taille et vos préférences (couleur, matière, détails), et on la façonne à la main rien que pour vous.";
-  if (has('livr','délai','delai','expédi','envoi'))       return "Nous livrons sous 24 h à 3 jours au Bénin 🚚, et sous 3 à 14 jours ouvrables à l'international. Vous êtes tenu(e) au courant par WhatsApp jusqu'à la réception de votre colis.";
-  if (has('retour','rembours','échange','echange'))        return "Les retours sont acceptés dans un délai maximum de 3 jours après la livraison ✨, sous réserve du respect de nos conditions (article non porté, dans son emballage d'origine). Je vous guide pas à pas si besoin.";
-  if (has('taille','pointure','size'))                     return "À vous de me dire la taille que vous souhaitez 📏. Et si vous tenez à une confection personnalisée de la chaussure de votre choix, indiquez-moi les détails : on la réalise sur mesure pour vous.";
-  if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre nom et la date de votre commande, je vérifie aussitôt l'état de votre colis avec l'équipe et je reviens vers vous.";
-  if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
+  if (has('livr','délai','delai','expédi','envoi','combien de temps','ça prend','ca prend','recevoir','reçois'))
+    return "Nous livrons sous 24 h à 3 jours au Bénin 🚚, et sous 3 à 14 jours ouvrables à l'international. Vous êtes tenu(e) au courant par WhatsApp jusqu'à la réception de votre colis.";
+  if (has('retour','rembours','échange','echange','renvoyer','pas la bonne'))
+    return "Les retours sont acceptés dans un délai maximum de 3 jours après la livraison ✨, sous réserve du respect de nos conditions (article non porté, dans son emballage d'origine). Je vous guide pas à pas si besoin.";
+  if (has('taille','pointure','size','chausse','je fais du'))
+    return "À vous de me dire la taille que vous souhaitez 📏. Et si vous tenez à une confection personnalisée de la chaussure de votre choix, indiquez-moi les détails : on la réalise sur mesure pour vous.";
+  if (has('suiv','commande','colis','tracking','où est','ou est','ma commande','livré'))
+    return "Avec plaisir 📦 Communiquez-moi votre nom et la date de votre commande, je vérifie aussitôt l'état de votre colis avec l'équipe et je reviens vers vous.";
+  if (has('paiement','payer','paye','momo','mobile money','carte','paypal','espèce','espece','cash','wave'))
     return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
-  if (has('prix','coût','cout','combien','tarif'))         return "Nos pièces solo sont à 9 000 FCFA (femme) ou 11 000 FCFA (homme). Les ensembles duo + pochette sont à 15 000 FCFA, et les duos complets entre 19 900 et 24 000 FCFA selon le modèle 😊";
-  if (has('cuir','matière','matiere','qualité','qualite')) return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
-  if (has('pochette','sac','clutch'))                      return "Certains de nos ensembles duo incluent une pochette assortie 👝. Retrouvez-les dans l'onglet « Ensembles » du catalogue.";
-  if (has('bonjour','salut','bonsoir','coucou','hello'))   return "Bonjour et bienvenue chez LSA ✨ Je suis Sofia, votre conseillère. Comment puis-je vous aider ?";
-  if (has('merci','super','parfait','génial','genial'))    return "Avec grand plaisir 🤍 N'hésitez pas pour toute question. Bel shopping chez LSA !";
-  if (has('contact','whatsapp','téléphone','telephone','instagram','facebook','tiktok','réseau'))
+  if (has('prix','coût','cout','combien','tarif','ça coûte','ca coute','cher'))
+    return "Nos pièces solo sont à 9 000 FCFA (femme) ou 11 000 FCFA (homme). Les ensembles duo + pochette sont à 15 000 FCFA, et les duos complets entre 19 900 et 24 000 FCFA selon le modèle 😊";
+  if (has('cuir','matière','matiere','qualité','qualite','matériau','materiau'))
+    return "Chaque pièce LSA est façonnée à la main au Bénin, dans des matières soigneusement sélectionnées pour leur qualité 🧵. C'est tout l'esprit Luxury Artisanal.";
+  if (has('pochette','sac','clutch','saccoche','sacoche'))
+    return "Certains de nos ensembles duo incluent une pochette assortie 👝. Retrouvez-les dans l'onglet « Ensembles » du catalogue.";
+  if (has('bonjour','salut','bonsoir','coucou','hello','cc','slt','yo'))
+    return "Bonjour et bienvenue chez LSA ✨ Je suis Sofia, votre conseillère. Comment puis-je vous aider ?";
+  if (has('merci','super','parfait','génial','genial','top','nickel'))
+    return "Avec grand plaisir 🤍 N'hésitez pas pour toute question. Bel shopping chez LSA !";
+  if (has('contact','whatsapp','téléphone','telephone','instagram','facebook','tiktok','réseau','reseau','numéro','numero','appeler'))
     return "Joignez-nous sur WhatsApp au +229 0196685554 📱, ou suivez-nous sur Facebook, TikTok et Instagram : Luxury - LSA.";
-  return "Je suis là pour vous aider sur nos modèles, les pointures, la livraison ou le paiement 😊 Que souhaitez-vous savoir ?";
+  return "Je peux vous renseigner sur nos modèles, les tailles, la livraison, les retours, le paiement ou la confection sur mesure 😊 Choisissez une suggestion ci-dessous, ou parlez directement à un conseiller sur WhatsApp.";
 }
 
 function addMsg(text, who) {
@@ -2060,12 +2100,25 @@ function sendMessage() {
   const text = input.value.trim(); if (!text) return;
   input.value = '';
   addMsg(text, 'user');
-  document.getElementById('quick-replies').style.display = 'none';
+  // On masque les suggestions pendant que Sofia « écrit », puis on les ré-affiche
+  // après sa réponse : la conversation peut ainsi continuer, question après question.
+  const quick = document.getElementById('quick-replies');
+  quick.style.display = 'none';
   showTyping();
   const reply = sofiaReply(text);
-  setTimeout(() => { hideTyping(); addMsg(reply, 'bot'); }, 700 + Math.random()*500);
+  setTimeout(() => {
+    hideTyping();
+    addMsg(reply, 'bot');
+    // Réapparaît tant qu'il reste au moins une suggestion non encore utilisée.
+    if (quick.querySelector('.quick-btn:not(.used)')) quick.style.display = 'flex';
+  }, 700 + Math.random()*500);
 }
-function sendQuick(text) { document.getElementById('chat-input').value=text; sendMessage(); }
+// btn : le bouton cliqué (masqué ensuite pour ne pas reposer la même question).
+function sendQuick(btn, text) {
+  if (btn) btn.classList.add('used');
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
 
 // ══════════════════════════════════════════
 // NAVIGATION / HAMBURGER / BACK-TO-TOP
