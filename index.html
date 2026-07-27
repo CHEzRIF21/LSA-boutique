@@ -1197,6 +1197,7 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     <button class="quick-btn" onclick="sendQuick('Comment faire un retour ?')">↩ Retours</button>
     <button class="quick-btn" onclick="sendQuick('Je veux suivre ma commande')">📦 Suivi</button>
     <button class="quick-btn" onclick="sendQuick('Quelles tailles sont disponibles ?')">📏 Tailles</button>
+    <button class="quick-btn" onclick="sendQuick('Puis-je commander une confection sur mesure ?')">✂️ Sur-mesure</button>
   </div>
   <div class="chat-input-row">
     <input class="chat-input" id="chat-input" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendMessage()" aria-label="Message">
@@ -1222,7 +1223,7 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matc
 // ══════════════════════════════════════════
 const marqueeItems = [
   '<b>Matières nobles</b>', '<b>Fait main au Bénin</b>', '<b>Livraison Afrique & International</b>',
-  '<b>Paiement à la livraison</b>', '<b>Retours sous 14 jours</b>', '<b>Mobile Money accepté</b>'
+  '<b>Paiement à la livraison</b>', '<b>Livraison 24h–3j au Bénin</b>', '<b>Confection sur mesure</b>', '<b>Mobile Money accepté</b>'
 ];
 
 // Catalogue reconstruit depuis l'arborescence public/images/{Collection Homme, collection Femme, Ensemble}
@@ -1917,10 +1918,12 @@ function openChat()   { document.getElementById('chat-window').classList.add('op
 function sofiaReply(msg) {
   const t = msg.toLowerCase();
   const has = (...k) => k.some(x => t.includes(x));
-  if (has('livr','délai','delai','expédi','envoi'))       return "Nous livrons en 3 à 7 jours ouvrés au Bénin et en Afrique de l'Ouest 🚚, et 10 à 15 jours à l'international. Vous recevez un lien de suivi par WhatsApp dès l'expédition.";
-  if (has('retour','rembours','échange','echange'))        return "Les retours et échanges sont acceptés sous 14 jours ✨, l'article devant être non porté et dans son emballage d'origine. Je vous guide pas à pas si besoin.";
-  if (has('taille','pointure','size'))                     return "Nos modèles taillent normalement, du 37 au 45 selon les pièces 📏. Dites-moi votre pointure et le modèle souhaité, je confirme la disponibilité.";
-  if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre numéro de commande (format LSA-XXXXX) et je vous donne l'état de votre colis en temps réel.";
+  if (has('sur mesure','sur-mesure','mesure','confection','personnalis','custom'))
+    return "Bien sûr ✨ Au-delà de nos modèles, nous réalisons des confections sur mesure : dites-moi la chaussure souhaitée, votre taille et vos préférences (couleur, matière, détails), et on la façonne à la main rien que pour vous.";
+  if (has('livr','délai','delai','expédi','envoi'))       return "Nous livrons sous 24 h à 3 jours au Bénin 🚚, et sous 3 à 14 jours ouvrables à l'international. Vous êtes tenu(e) au courant par WhatsApp jusqu'à la réception de votre colis.";
+  if (has('retour','rembours','échange','echange'))        return "Les retours sont acceptés dans un délai maximum de 3 jours après la livraison ✨, sous réserve du respect de nos conditions (article non porté, dans son emballage d'origine). Je vous guide pas à pas si besoin.";
+  if (has('taille','pointure','size'))                     return "À vous de me dire la taille que vous souhaitez 📏. Et si vous tenez à une confection personnalisée de la chaussure de votre choix, indiquez-moi les détails : on la réalise sur mesure pour vous.";
+  if (has('suiv','commande','colis','tracking','où est'))  return "Avec plaisir 📦 Communiquez-moi votre nom et la date de votre commande, je vérifie aussitôt l'état de votre colis avec l'équipe et je reviens vers vous.";
   if (has('paiement','payer','momo','mobile money','carte','paypal','espèce','cash'))
     return "Une fois votre commande envoyée sur WhatsApp, on convient ensemble du paiement : Mobile Money (MTN, Moov, Orange, Wave) ou espèces à la livraison 💳. Simple et direct !";
   if (has('prix','coût','cout','combien','tarif'))         return "Nos pièces solo sont à 9 000 FCFA (femme) ou 11 000 FCFA (homme). Les ensembles duo + pochette sont à 15 000 FCFA, et les duos complets entre 19 900 et 24 000 FCFA selon le modèle 😊";
