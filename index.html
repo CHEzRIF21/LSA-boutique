@@ -867,6 +867,8 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     white-space: nowrap; opacity: 0; animation: quickBtnIn 0.4s ease forwards;
   }
   .quick-btn:hover { border-color: var(--or); color: var(--or); }
+  /* Une suggestion déjà posée disparaît, les autres restent pour poursuivre la conversation. */
+  .quick-btn.used { display: none; }
   /* Les suggestions apparaissent l'une après l'autre plutôt que toutes d'un coup. */
   .quick-btn:nth-child(1) { animation-delay: 0.2s; }
   .quick-btn:nth-child(2) { animation-delay: 0.45s; }
@@ -1210,11 +1212,11 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
   </div>
   <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
   <div class="quick-replies" id="quick-replies">
-    <button class="quick-btn" onclick="sendQuick('Quels sont vos délais de livraison ?')">🚚 Livraison</button>
-    <button class="quick-btn" onclick="sendQuick('Comment faire un retour ?')">↩ Retours</button>
-    <button class="quick-btn" onclick="sendQuick('Je veux suivre ma commande')">📦 Suivi</button>
-    <button class="quick-btn" onclick="sendQuick('Quelles tailles sont disponibles ?')">📏 Tailles</button>
-    <button class="quick-btn" onclick="sendQuick('Puis-je commander une confection sur mesure ?')">✂️ Sur-mesure</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Quels sont vos délais de livraison ?')">🚚 Livraison</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Comment faire un retour ?')">↩ Retours</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Je veux suivre ma commande')">📦 Suivi</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Quelles tailles sont disponibles ?')">📏 Tailles</button>
+    <button class="quick-btn" onclick="sendQuick(this,'Puis-je commander une confection sur mesure ?')">✂️ Sur-mesure</button>
   </div>
   <div class="chat-input-row">
     <input class="chat-input" id="chat-input" placeholder="Écrire un message…" onkeydown="if(event.key==='Enter')sendMessage()" aria-label="Message">
@@ -1976,12 +1978,25 @@ function sendMessage() {
   const text = input.value.trim(); if (!text) return;
   input.value = '';
   addMsg(text, 'user');
-  document.getElementById('quick-replies').style.display = 'none';
+  // On masque les suggestions pendant que Sofia « écrit », puis on les ré-affiche
+  // après sa réponse : la conversation peut ainsi continuer, question après question.
+  const quick = document.getElementById('quick-replies');
+  quick.style.display = 'none';
   showTyping();
   const reply = sofiaReply(text);
-  setTimeout(() => { hideTyping(); addMsg(reply, 'bot'); }, 700 + Math.random()*500);
+  setTimeout(() => {
+    hideTyping();
+    addMsg(reply, 'bot');
+    // Réapparaît tant qu'il reste au moins une suggestion non encore utilisée.
+    if (quick.querySelector('.quick-btn:not(.used)')) quick.style.display = 'flex';
+  }, 700 + Math.random()*500);
 }
-function sendQuick(text) { document.getElementById('chat-input').value=text; sendMessage(); }
+// btn : le bouton cliqué (masqué ensuite pour ne pas reposer la même question).
+function sendQuick(btn, text) {
+  if (btn) btn.classList.add('used');
+  document.getElementById('chat-input').value = text;
+  sendMessage();
+}
 
 // ══════════════════════════════════════════
 // NAVIGATION / HAMBURGER / BACK-TO-TOP
