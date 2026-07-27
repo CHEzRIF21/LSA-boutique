@@ -861,8 +861,25 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
   .chat-send { background: var(--or); color: white; border: none; padding: 0.6rem 1rem; cursor: pointer; font-size: 0.9rem; transition: background 0.2s; }
   .chat-send:hover { background: #9e7035; }
   .quick-replies { display: flex; flex-wrap: wrap; gap: 0.38rem; padding: 0 0.8rem 0.75rem; background: #faf9f7; }
-  .quick-btn { font-size: 0.65rem; padding: 0.3rem 0.68rem; border: 1px solid var(--gris-clair); background: white; cursor: pointer; color: var(--gris); font-family: 'Inter', sans-serif; transition: all 0.2s; white-space: nowrap; }
+  .quick-btn {
+    font-size: 0.65rem; padding: 0.3rem 0.68rem; border: 1px solid var(--gris-clair); background: white;
+    cursor: pointer; color: var(--gris); font-family: 'Inter', sans-serif; transition: border-color 0.2s, color 0.2s;
+    white-space: nowrap; opacity: 0; animation: quickBtnIn 0.4s ease forwards;
+  }
   .quick-btn:hover { border-color: var(--or); color: var(--or); }
+  /* Les suggestions apparaissent l'une après l'autre plutôt que toutes d'un coup. */
+  .quick-btn:nth-child(1) { animation-delay: 0.2s; }
+  .quick-btn:nth-child(2) { animation-delay: 0.45s; }
+  .quick-btn:nth-child(3) { animation-delay: 0.7s; }
+  .quick-btn:nth-child(4) { animation-delay: 0.95s; }
+  .quick-btn:nth-child(5) { animation-delay: 1.2s; }
+  @keyframes quickBtnIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .quick-btn { opacity: 1; animation: none; }
+  }
 
   /* ═══════════════════════════════════════
      TOAST + BACK TO TOP
