@@ -1209,7 +1209,7 @@ src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
     <h2 class="section-title">Une question ? Une commande ?<br><em>Écrivez-nous.</em></h2>
     <p>Notre équipe vous répond sur WhatsApp en quelques minutes — conseils de pointure, disponibilité, livraison, tout y passe.</p>
     <a class="wa-btn" href="https://wa.me/2290196685554?text=Bonjour%20LSA%20%F0%9F%91%8B%20Je%20souhaite%20passer%20une%20commande." target="_blank" rel="noopener" onclick="trackWhatsAppLead({ content_name: 'Bouton WhatsApp — accueil' })">
-      <span>📱</span> Commander sur WhatsApp
+      <span>📱</span> Commander
     </a>
   </div>
 </section>
@@ -1717,7 +1717,7 @@ function openQuick(id) {
   // pratique pour les campagnes pub ciblées par produit. replaceState ne déclenche pas hashchange.
   history.replaceState(null, '', '#' + slugify(p.nom));
   // NB : l'ouverture d'une fiche ne déclenche AUCUN événement pixel. Le pixel Meta ne mesure que
-  // le passage à l'action final (clic « Commander sur WhatsApp » → discussion WhatsApp). Voir trackWhatsAppLead().
+  // le passage à l'action final (clic « Commander » → discussion WhatsApp). Voir trackWhatsAppLead().
 }
 function closeQuick() {
   document.getElementById('qv-modal').classList.remove('open');
@@ -1914,7 +1914,7 @@ function renderQvCoordonneesStep() {
     </form>`;
   document.getElementById('qv-cta-bar').innerHTML = `
     <button type="submit" form="order-form" class="btn-primary qv-sticky-btn wa-submit" id="qv-submit-btn" onclick="qvInvalidHandled=false">
-      <span style="margin-right:0.6rem">📱</span> Commander sur WhatsApp →
+      <span style="margin-right:0.6rem">📱</span> Commander →
     </button>`;
 }
 
@@ -1951,7 +1951,7 @@ function buildOrderMessage(nom, ville, tel) {
 
 // ══════════════════════════════════════════
 // PIXEL META — UN SEUL événement de conversion : « Lead ».
-// Il ne se déclenche QUE sur un clic d'un bouton final « Commander sur WhatsApp » qui redirige
+// Il ne se déclenche QUE sur un clic d'un bouton final « Commander » qui redirige
 // vers la discussion WhatsApp avec l'administrateur (bouton d'accueil + bouton de validation du
 // tunnel). C'est le passage à l'action que la boutique mesure et optimise en pub. Aucune vue de
 // fiche, aucun lien de contact WhatsApp simple ne déclenche le pixel.
