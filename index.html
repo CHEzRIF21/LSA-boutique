@@ -29,6 +29,12 @@ fbq('track', 'PageView');
 src="https://www.facebook.com/tr?id=929739565159117&ev=PageView&noscript=1"
 /></noscript>
 <!-- End Meta Pixel Code -->
+<!-- Vercel Web Analytics — équivalent de inject() de @vercel/analytics, sans bundler :
+     ce site est un fichier HTML statique, un import npm ne serait pas résolvable par le navigateur. -->
+<script>
+  window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+</script>
+<script defer src="/_vercel/insights/script.js"></script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
